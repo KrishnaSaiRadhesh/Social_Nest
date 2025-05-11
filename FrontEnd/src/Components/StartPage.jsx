@@ -7,7 +7,7 @@ const StartPage = () => {
       <div className=" bg-gradient-to-b from-blue-100 w-[100vw] min-h-screen to-white overflow-hidden flex items-center justify-center gap-30">
 
       <div>
-        <img src="../public/start.png" className='h-[25em]' alt="Logo" />
+        <img src="/start.png" className='h-[25em]' alt="Logo" />
       </div>
 
       {/* Main Content */}

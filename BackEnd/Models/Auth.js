@@ -12,6 +12,23 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String
+    },
+    image:{
+        type:String,
+        default:"/Profile.png"
+
+    },
+    followers:{
+        type:mongoose.Schema.Types.ObjectId,
+         ref:"User"
+    },
+    following:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
+    posts:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Post"
     }
 }, 
 {

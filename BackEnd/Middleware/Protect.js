@@ -6,12 +6,12 @@ exports.protectRoute = async(req, res, next) => {
         const token = req.cookies.token
 
         if(!token){
-            return res.status.json({ error: "Unauthorized: No Token Provied"});
+            return res.status(400).json({ error: "Unauthorized: No Token Provied"});
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECERT)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if(!decoded){
-            return res.status.json({ error: "Unauthorized: Invalid Token"});
+            return res.status(400).json({ error: "Unauthorized: Invalid Token"});
         }
 
         const user = await userModel.findById(decoded.userId).select("-password")
@@ -28,3 +28,5 @@ exports.protectRoute = async(req, res, next) => {
 }
 
 // Here this middleware is used to check whether the user is available or not...
+// It is used get user id as a middleware
+// It is used to control the current user...

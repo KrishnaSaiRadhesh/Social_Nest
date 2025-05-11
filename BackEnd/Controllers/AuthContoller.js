@@ -53,7 +53,7 @@ exports.SIGNUP = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({error: "Signup error"})
+        return res.status(500).json({error: "Signup error"})
     }
 }
 
@@ -78,7 +78,7 @@ exports.LOGIN = async(req, res) =>{
 
 
         
-        const token = await jwt.sign({userId: user._id}, process.env.JWT_SECERT, {expiresIn: "10d"})  // Here 
+        const token = await jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: "10d"})  // Here 
 
         const UserData = {
             _id: user._id,
@@ -89,7 +89,8 @@ exports.LOGIN = async(req, res) =>{
         return res.cookie("token", token, {
             httpOnly: true,
             sameSite: "strict",
-            maxAge: 1*24*60*1000
+            maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days in ms
+
         }).json({
             message: `WELCOME back ${UserData.name}`,
             success: true,
@@ -98,29 +99,42 @@ exports.LOGIN = async(req, res) =>{
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({error: "Signup error"})
+        return res.status(500).json({error: "Signup error"})
     }
     
 }
 
 
-exports.LOGOUT = async(req,res) =>{
-    try{
-        res.cookie("token", "", {maxAge:0})
-        res.status(200).json({message: "Logged out successfully", success:true})
-    }catch(error){
-        console.log(error)
-        res.status(500).json({error: "Logout error"})
-    }
-}
+exports.LOGOUT = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+
+    return res.status(200).json({ message: "Logged out successfully", success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Logout error" });
+  }
+};
 
 
-exports.PROFILE = async(req, res) =>{
+exports.GETALLUSER = async (req, res) => {
     try {
-        const profile = await userModel.findById(req.user._id).select("password")
-        return res.status(200).json(profile)
+        const currentUserId = req.user._id; // Assuming you have added authentication middleware that sets req.user
+        const allUsers = await userModel
+            .find({ _id: { $ne: currentUserId } }) // exclude current user
+            .select("-password");
+        
+        return res.status(200).json(allUsers);
     } catch (error) {
-        console.log(error)
-        res.status(500).json({error: "Profile error"})
+        console.log(error);
+        return res.status(500).json({ error: "Fetch error" });
     }
 }

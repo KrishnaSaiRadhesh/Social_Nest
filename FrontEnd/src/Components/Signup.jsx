@@ -63,14 +63,14 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center w-[100vw] gap-50 bg-gradient-to-br from-white to-blue-100 p-4">
 
       <div>
-        <img src="../public/start.png" className='h-[25em]' alt="Logo" />
+        <img src="/start.png" className='h-[25em]' alt="Logo" />
       </div>
 
       <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg p-6">
         {/* Top Header */}
         <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <img className= "w-10 h-10 rounded-full" src="../public/Logo.png" alt="" />
+          <img className= "w-10 h-10 rounded-full" src="/Logo.png" alt="" />
           <h5 className="text-[20px] font-serif">Social Nest</h5>
         </div>
           <Link to={"/Login"}>
