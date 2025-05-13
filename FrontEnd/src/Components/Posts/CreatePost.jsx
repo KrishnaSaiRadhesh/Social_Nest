@@ -40,7 +40,7 @@ const CreatePost = () => {
       setMessage('Post created successfully!')
       setDesc('');
       setImage('');
-      console.log(data);
+  
     } catch (error) {
       console.error(error);
       setMessage('Failed to create post.');

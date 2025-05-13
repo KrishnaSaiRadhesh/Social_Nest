@@ -3,18 +3,35 @@ import Header from '../Components/Landing/Header'
 import First from '../Components/Landing/First'
 import Second from '../Components/Landing/Second'
 import Third from '../Components/Landing/Third'
+import io from 'socket.io-client';
 
+const socket = io('http://localhost:3000', { withCredentials: true });
 
 const LandingPage = () => {
   return (
-    <div>
-        <Header/>
-        <div className='flex p-5 justify-around'>
-          <First className=""/>
-          <Second className=""/>
-          <Third className=""/>
+    <div className='h-screen flex flex-col'>
+      {/* Fixed Header */}
+      <div className='fixed top-0 left-0 right-0 z-10'>
+        <Header />
+      </div>
+
+      {/* Main layout: below header */}
+      <div className='flex flex-1 pt-[64px]'> {/* Adjust pt to Header height */}
+        {/* Left Sidebar */}
+        <div className='w-[350px] fixed top-[64px] bottom-0 mt-4 left-0'>
+          <First socket={socket} />
         </div>
-        
+
+        {/* Middle Scrollable Content */}
+        <div className='flex-1 max-w-7xl mx-auto overflow-y-auto pt-4 px-4'>
+          <Second />
+        </div>
+
+        {/* Right Sidebar */}
+        <div className='w-[350px] fixed top-[64px] bottom-0 mt-8 right-0'>
+          <Third />
+        </div>
+      </div>
     </div>
   )
 }

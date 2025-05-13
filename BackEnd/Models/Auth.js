@@ -18,17 +18,17 @@ const userSchema = new mongoose.Schema({
         default:"/Profile.png"
 
     },
-    followers:{
-        type:mongoose.Schema.Types.ObjectId,
-         ref:"User"
-    },
-    following:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
-    },
+   followers: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    default: [], // Ensure default is an empty array
+  },
+  following: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    default: [], // Ensure default is an empty array
+  },
     posts:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Post"
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+        default: [],
     }
 }, 
 {

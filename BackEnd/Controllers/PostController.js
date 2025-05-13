@@ -1,15 +1,52 @@
 const cloudinary = require("../Config/cloudinary");
 const PostModel = require("../Models/PostModel");
+const userModel=require("../Models/Auth")
+
+// exports.CREATEPOST = async (req, res) => {
+//   const { image, description } = req.body;
+//   const user_id = req.user._id;
+
+//   try {
+//     if (!image || !description) {
+//       return res.status(400).json({ message: "Please fill in all fields." });
+//     }
+
+//     let imageUpload;
+//     try {
+//       imageUpload = await cloudinary.uploader.upload(image);
+//     } catch (uploadError) {
+//       console.error("Cloudinary upload failed:", uploadError);
+//       return res.status(500).json({ message: "Failed to upload image." });
+//     }
+
+//     const NewPost = await PostModel.create({
+//       image: imageUpload.secure_url,
+//       description,
+//       user: user_id,
+//     });
+
+//     return res.status(200).json({ message: "Post created successfully", NewPost });
+//   } catch (error) {
+//     console.error("Error creating post:", error);
+//     return res.status(500).json({ message: "Error creating post." });
+//   }
+// };
+
+
+
+
 
 exports.CREATEPOST = async (req, res) => {
   const { image, description } = req.body;
   const user_id = req.user._id;
 
   try {
+    // Validate input
     if (!image || !description) {
       return res.status(400).json({ message: "Please fill in all fields." });
     }
 
+    // Upload image to Cloudinary
     let imageUpload;
     try {
       imageUpload = await cloudinary.uploader.upload(image);
@@ -18,13 +55,30 @@ exports.CREATEPOST = async (req, res) => {
       return res.status(500).json({ message: "Failed to upload image." });
     }
 
-    const NewPost = await PostModel.create({
+    // Create new post
+    const newPost = await PostModel.create({
       image: imageUpload.secure_url,
       description,
       user: user_id,
     });
 
-    return res.status(200).json({ message: "Post created successfully", NewPost });
+    // Update user's posts array
+    await userModel.findByIdAndUpdate(
+      user_id,
+      { $push: { posts: newPost._id } },
+      { new: true }
+    );
+
+    // Optionally populate the user field for the response
+    const populatedPost = await PostModel.findById(newPost._id).populate(
+      "user",
+      "name image"
+    );
+
+    return res.status(200).json({
+      message: "Post created successfully",
+      newPost: populatedPost,
+    });
   } catch (error) {
     console.error("Error creating post:", error);
     return res.status(500).json({ message: "Error creating post." });

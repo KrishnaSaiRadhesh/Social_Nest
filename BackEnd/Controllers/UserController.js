@@ -46,13 +46,6 @@ exports.UPDATEPROFILE = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log('UpdateProfile request:', {
-      name,
-      email,
-      hasImage: !!image,
-      currentImage: user.image,
-    });
-
     let updatedImageUrl = user.image || ''; // Default to empty string if no image
 
     if (image && image.startsWith('data:image')) {
@@ -94,7 +87,7 @@ exports.UPDATEPROFILE = async (req, res) => {
 
 exports.PROFILE = async(req, res) =>{
     try {
-        const profile = await userModel.findById(req.user._id).select("-password")
+        const profile = await userModel.findById(req.user._id).populate("posts").select("-password")
         return res.status(200).json(profile)
     } catch (error) {
         console.log(error)
@@ -103,32 +96,34 @@ exports.PROFILE = async(req, res) =>{
 }
 
 
-exports.FOLLOW = async(req, res) => {
+exports.FOLLOW = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const userToFollowId = req.params.id // Here when the user click on the follow button that specific id will go to that url and that id we will get using this params.id
+    const userToFollowId = req.params.id;
 
     const userToFollow = await userModel.findById(userToFollowId);
-    const currentUser = await userModel.findById(loggedInUserId);
+    const currentUser = await userModel.findById(loggedInUserId) // Here when the user click on the follow button that specific id will go to that url and that id we will get using this params.id
 
-    if(!userToFollow || !currentUser){
-      return res.status(404).json({message: "User not found"})
+    if (!userToFollow || !currentUser) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    if(!userToFollow.followers.includes(loggedInUserId)){
-      await userToFollow.updateOne({$push : {followers: loggedInUserId}})
-      await currentUser.updateOne({$push: {following: userToFollowId}})
+    // Ensure followers is an array, default to [] if undefined
+    const followers = userToFollow.followers || [];
 
-      return res.status(200).json({message: "Followed sucessfully"})
-    }
-    else{
+    if (!followers.includes(loggedInUserId)) {
+      await userToFollow.updateOne({ $push: { followers: loggedInUserId } });
+      await currentUser.updateOne({ $push: { following: userToFollowId } });
+
+      return res.status(200).json({ message: 'Followed successfully' });
+    } else {
       return res.status(400).json({
-        message: `You are already following ${userToFollow.name}`
+        message: `You are already following ${userToFollow.name}`,
       });
     }
   } catch (error) {
-    console.log("Error in FollowUser: ", error.message);
-    return res.status(500).json({error: error.message})
+    console.log('Error in FollowUser: ', error.message);
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -149,7 +144,7 @@ exports.UNFOLLOW = async (req, res) => {
       await userToFollow.updateOne({$pull: {followers: loggedInUserId}});
       await currentUser.updateOne({$pull: {following : userToFollowId}})
 
-      return res.status(200).code({message: "Unfollowed successfully"})
+      return res.status(200).json({message: "Unfollowed successfully"})
     }
     else{
       return res.status(400).json({
@@ -161,3 +156,36 @@ exports.UNFOLLOW = async (req, res) => {
     return res.status(500).json({error: error.message})
   }
 }
+
+exports.GET_USER_PROFILE = async (req, res) => {
+  try {
+    const userId = req.params.id;
+ 
+    
+    // Validate userId
+    if (!userId || userId === 'undefined') {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
+    // Ensure userId is a valid ObjectId
+    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ error: 'Invalid user ID format' });
+    }
+
+    const user = await userModel.findById(userId)
+      .populate("posts")
+      .select("-password");
+
+
+
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log("Error fetching user profile:", error);
+    res.status(500).json({ error: "Failed to fetch user profile" });
+  }
+};
