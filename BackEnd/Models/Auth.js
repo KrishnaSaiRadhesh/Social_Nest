@@ -29,7 +29,8 @@ const userSchema = new mongoose.Schema({
     posts:{
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
         default: [],
-    }
+    },
+    savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post", default: [] }], // New field for saved posts
 }, 
 {
     timestamps: true

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BsImage, BsCameraVideo, BsArrowLeft } from 'react-icons/bs'; // Added BsArrowLeft
 
 const UserProfile = () => {
   const [name, setName] = useState('');
@@ -13,7 +14,7 @@ const UserProfile = () => {
   const [posts, setPosts] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [activeTab, setActiveTab] = useState('posts'); // State for active tab
+  const [activeTab, setActiveTab] = useState('images');
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -95,12 +96,31 @@ const UserProfile = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  const filteredPosts = posts.filter((post) =>
+    activeTab === 'images' ? post.mediaType === 'image' : post.mediaType === 'video'
+  );
+
+  const handleBackClick = () => {
+    navigate('/home'); // Navigate to home page
+  };
+
+  if (loading) return <p className="text-center p-4">Loading...</p>;
+  if (error) return <p className="text-center p-4 text-red-500">{error}</p>;
 
   return (
     <div>
       <div className="flex flex-col justify-center items-center max-w-7xl mx-auto p-3">
+        {/* Back Button */}
+        <div className="w-full max-w-7xl flex justify-start mb-4">
+          <button
+            className="flex items-center gap-2 p-2 text-blue-500 font-semibold hover:bg-gray-100 rounded-lg"
+            onClick={handleBackClick}
+          >
+            <BsArrowLeft size={20} />
+            Back
+          </button>
+        </div>
+
         <div className="flex justify-center items-start gap-10 p-3">
           <div>
             <img src={image || '/Profile.png'} alt="" className="w-[200px]" />
@@ -142,54 +162,58 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* Tab Bar */}
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto mt-4">
         <div className="flex justify-center border-b border-gray-300">
           <button
-            className={`px-5 py-2 font-semibold ${activeTab === 'posts' ? 'border-b-2 border-black' : ''}`}
-            onClick={() => setActiveTab('posts')}
+            className={`flex items-center gap-2 p-3 text-lg font-semibold ${
+              activeTab === 'images'
+                ? 'border-b-2 border-blue-500 text-blue-500'
+                : 'text-gray-500'
+            }`}
+            onClick={() => setActiveTab('images')}
           >
-            POSTS
+            <BsImage />
+            Images
           </button>
           <button
-            className={`px-5 py-2 font-semibold ${activeTab === 'reels' ? 'border-b-2 border-black' : ''}`}
-            onClick={() => setActiveTab('reels')}
+            className={`flex items-center gap-2 p-3 text-lg font-semibold ${
+              activeTab === 'videos'
+                ? 'border-b-2 border-blue-500 text-blue-500'
+                : 'text-gray-500'
+            }`}
+            onClick={() => setActiveTab('videos')}
           >
-            REELS
-          </button>
-          <button
-            className={`px-5 py-2 font-semibold ${activeTab === 'tagged' ? 'border-b-2 border-black' : ''}`}
-            onClick={() => setActiveTab('tagged')}
-          >
-            TAGGED
+            <BsCameraVideo />
+            Videos
           </button>
         </div>
 
-        {/* Tab Content */}
         <div className="my-2 pb-2 bg-white shadow-xl">
-          {activeTab === 'posts' && (
-            <div className="grid grid-cols-3 gap-1">
-              {posts.map((post) => (
-                <div key={post._id}>
-                  <img
-                    src={post.image}
-                    alt=""
-                    className="h-[300px] w-[400px] object-contain"
-                  />
+          <div className="grid grid-cols-3 gap-1">
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <div key={post._id} className="relative">
+                  {post.mediaType === 'image' ? (
+                    <img
+                      src={post.image}
+                      alt="Post"
+                      className="h-[300px] w-[400px] object-contain"
+                    />
+                  ) : (
+                    <video
+                      src={post.image}
+                      controls
+                      className="h-[300px] w-[400px] object-contain"
+                    />
+                  )}
                 </div>
-              ))}
-            </div>
-          )}
-          {activeTab === 'reels' && (
-            <div className="text-center p-5">
-              <p>No reels available yet.</p>
-            </div>
-          )}
-          {activeTab === 'tagged' && (
-            <div className="text-center p-5">
-              <p>No tagged posts available yet.</p>
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="col-span-3 text-center p-4 text-gray-500">
+                {activeTab === 'images' ? 'No images yet.' : 'No videos yet.'}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

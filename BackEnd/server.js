@@ -34,17 +34,18 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', require('./Routes/UserRoute'));
 app.use('/api/posts', require('./Routes/PostRouter'));
 app.use('/api/messages', require('./Routes/MessageRouter'));
+app.use('/api/stories', require('./Routes/StoryRouter')(io));
 
 // Socket.IO
 let onlineUsers = [];
 const userSocketMap = new Map(); // Map socket.id to userId
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+
 
   // Handle user joining
   socket.on('join', (userId) => {
-  console.log(`User ${userId} joined`);
+
   userSocketMap.set(socket.id, userId);
   if (!onlineUsers.includes(userId)) {
     onlineUsers.push(userId);
@@ -55,20 +56,19 @@ io.on('connection', (socket) => {
 
   // Join chat room
   socket.on('joinRoom', (roomId) => {
-    console.log(`Socket ${socket.id} joined room ${roomId}`);
+
     socket.join(roomId);
   });
 
   // Send message
   socket.on('sendMessage', ({ roomId, ...message }) => {
-    console.log(`Message sent to room ${roomId}:`, message);
+ 
     io.to(roomId).emit('receiveMessage', message);
   });
 
   // Handle disconnection
   socket.on('disconnect', () => {
     const userId = userSocketMap.get(socket.id);
-    console.log(`User disconnected: ${socket.id} (UserID: ${userId})`);
     if (userId) {
       onlineUsers = onlineUsers.filter((id) => id !== userId);
       userSocketMap.delete(socket.id);

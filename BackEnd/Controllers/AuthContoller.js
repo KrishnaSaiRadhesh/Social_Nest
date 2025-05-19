@@ -1,6 +1,7 @@
 const userModel = require("../Models/Auth")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const { useTransition } = require("react")
 
 
 exports.SIGNUP = async (req, res) => {
@@ -138,3 +139,47 @@ exports.GETALLUSER = async (req, res) => {
         return res.status(500).json({ error: "Fetch error" });
     }
 }
+
+
+exports.USERSTHATFOLLOW = async (req,res) => {
+   try {
+      const user_id = req.user._id;
+      const users = await userModel.find({followers:user_id})
+      console.log("friends",users)
+      return res.status(200).json(users)
+   } catch (error) {
+      console.log(error)
+      return res.status(400).json({message: "unable to fetch"})
+   }
+} 
+
+exports.SUGGESTEDUSERS = async(req, res) =>{
+    try {
+        const user_id = req.user._id;
+       const users = await userModel.find({ followers: { $ne: user_id } })
+       
+         return res.status(200).json(users)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({message: "unable to fetch"})
+    }
+}
+
+
+exports.GETPROFILE = async (req, res) => {
+  try {
+    const user = await userModel
+      .findById(req.user._id)
+      .select("-password") // Exclude password
+      .populate("following", "name image") // Populate following users
+      .populate("followers", "name image") // Populate followers
+      .populate("savedPosts", "description image mediaType user"); // Populate saved posts
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Error fetching profile." });
+  }
+};

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IoArrowBack, IoSend, IoImageOutline } from 'react-icons/io5';
+import { BsArrowLeft } from 'react-icons/bs';
 
 const ChatApp = ({ socket }) => {
   const { friendId } = useParams();
@@ -15,6 +16,7 @@ const ChatApp = ({ socket }) => {
   const [error, setError] = useState('');
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   // Fetch user ID, friends, and friend details
   useEffect(() => {
@@ -31,10 +33,12 @@ const ChatApp = ({ socket }) => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/auth/allusers', {
+        const res = await axios.get('http://localhost:3000/api/auth/friends', {
           withCredentials: true,
         });
+        console.log(res.data)
         setFriends(res.data);
+        console.log("friends",friends)
       } catch (error) {
         console.error('Error fetching friends:', error);
       }
@@ -176,10 +180,20 @@ const ChatApp = ({ socket }) => {
     }
   };
 
+   const handleBackClick = () => {
+    navigate('/home'); // Navigate back to profile page
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar: Friends List */}
       <div className="w-1/4 bg-white shadow-lg rounded-l-2xl p-4 flex flex-col">
+        <button
+          onClick={handleBackClick}
+          className="flex items-center gap-2 text-blue-500 font-semibold hover:text-blue-600 transition duration-200"
+        >
+          <BsArrowLeft size={24} /> Back 
+        </button>
         <h1 className="text-2xl font-bold mb-4 text-gray-800">Messages</h1>
         <div className="flex-1 overflow-y-auto">
           {friends.length > 0 ? (

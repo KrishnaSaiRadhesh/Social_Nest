@@ -189,3 +189,16 @@ exports.GET_USER_PROFILE = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 };
+
+
+// exports.USERSTHATFOLLOW = async (req,res) => {
+//    try {
+//       const user_id = req.user._id;
+//       const users = await userModel.find({followers:user_id})
+//       console.log("friends",users)
+//       return res.status(200).json(users)
+//    } catch (error) {
+//       console.log(error)
+//       return res.status(400).json({message: "unable to fetch"})
+//    }
+// } 

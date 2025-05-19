@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const CreatePost = () => {
-//   const [title, setTitle] = useState('');
+const CreatePost = ({ onPostCreated }) => {
   const [desc, setDesc] = useState('');
   const [image, setImage] = useState('');
   const [message, setMessage] = useState('');
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if ( !desc || !image) {
+    if (!desc || !image) {
       setMessage('Please fill in all fields.');
       return;
     }
@@ -29,18 +27,16 @@ const CreatePost = () => {
     try {
       const res = await axios.post(
         'http://localhost:3000/api/posts/CreatePost',
-        {  description:desc, image },
+        { description: desc, image },
         {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         }
       );
-
-      const data = res.data;
-      setMessage('Post created successfully!')
+      setMessage('Post created successfully!');
       setDesc('');
       setImage('');
-  
+      if (onPostCreated) onPostCreated(res.data.newPost);
     } catch (error) {
       console.error(error);
       setMessage('Failed to create post.');
@@ -48,34 +44,32 @@ const CreatePost = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto' }}>
-      <h2>Create New Post</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        {/* <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          style={{ display: 'block', marginBottom: '10px', width: '100%' }}
-        /> */}
+    <div className="max-w-md mx-auto mt-6 p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Create N</h2>
+      {message && <p className="text-red-500 mb-4">{message}</p>}
+      <div>
         <textarea
           placeholder="Description"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           required
-          style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           required
-          style={{ marginBottom: '10px' }}
+          className="block w-full mb-4 text-gray-700"
         />
-        <button type="submit">Post</button>
-      </form>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        >
+          Post
+        </button>
+      </div>
     </div>
   );
 };

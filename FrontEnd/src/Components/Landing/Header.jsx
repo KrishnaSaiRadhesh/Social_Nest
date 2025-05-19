@@ -17,6 +17,7 @@ const Header = () => {
           withCredentials: true,
         });
         const data = res.data;
+        console.log("Image profile",data)
         setImage(data.image);
       } catch (error) {
         console.error("Failed to fetch profile:", error);
@@ -27,10 +28,7 @@ const Header = () => {
       }
     };
 
-    const token = document.cookie.includes("token=");
-    if (token) {
       fetchProfile();
-    }
   }, [navigate]);
 
   const toggleModel = () => {

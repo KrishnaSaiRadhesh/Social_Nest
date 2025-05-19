@@ -10,6 +10,12 @@ const PostSchema = new mongoose.Schema(
       type: String,
       default: "/Profile.png"
     },
+    mediaType:{
+      type: String,
+      enum: ['image', 'video'],
+      default: 'image',
+      required: true
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
