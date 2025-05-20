@@ -18,7 +18,7 @@ const First = ({ socket }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/user/Profile', {
+        const res = await axios.get('https://social-nest-backend.onrender.com/api/user/Profile', {
           withCredentials: true,
         });
         const data = res.data;

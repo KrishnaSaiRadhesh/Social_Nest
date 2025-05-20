@@ -13,7 +13,7 @@ const Photos = () => {
     const fetchUserPhotos = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/api/user/profile`, {
+        const res = await axios.get(`https://social-nest-backend.onrender.com/api/user/profile`, {
           withCredentials: true,
         });
 

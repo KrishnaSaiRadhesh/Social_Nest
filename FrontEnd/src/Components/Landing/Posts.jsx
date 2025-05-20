@@ -24,7 +24,7 @@ const Posts = ({ posts, setPosts }) => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://localhost:3000/api/user/profile', {
+        const res = await axios.get('https://social-nest-backend.onrender.com/api/user/profile', {
           withCredentials: true,
         });
         // console.log('Profile response:', res.data); // Debug: Log the full response
@@ -74,7 +74,7 @@ const Posts = ({ posts, setPosts }) => {
   const commentSubmit = async (postId) => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${postId}/comment`,
+        `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
         { commentText: commentText[postId] || '' },
         { withCredentials: true }
       );
@@ -96,7 +96,7 @@ const Posts = ({ posts, setPosts }) => {
   const handleLike = async (id) => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${id}/like`,
+        `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
         {},
         { withCredentials: true }
       );
@@ -119,7 +119,7 @@ const Posts = ({ posts, setPosts }) => {
       const isSaved = savedPosts[postId];
       const endpoint = isSaved ? 'unsave' : 'save';
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${postId}/${endpoint}`,
+        `https://social-nest-backend.onrender.com/api/posts/${postId}/${endpoint}`,
         {},
         { withCredentials: true }
       );
@@ -178,7 +178,7 @@ const Posts = ({ posts, setPosts }) => {
     }
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/posts/${postId}`,
+        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
         { description: editDesc, image: editMedia, mediaType: editMediaType },
         { withCredentials: true }
       );
@@ -202,7 +202,7 @@ const Posts = ({ posts, setPosts }) => {
   const handleDelete = async (postId) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
-      await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
+      await axios.delete(`https://social-nest-backend.onrender.com/api/posts/${postId}`, {
         withCredentials: true,
       });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));

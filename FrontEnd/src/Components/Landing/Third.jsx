@@ -18,7 +18,7 @@ const Third = () => {
       setLoading(true);
       try {
         // Fetch current user's profile to get their ID and following list
-        const profileRes = await axios.get('http://localhost:3000/api/user/profile', {
+        const profileRes = await axios.get('https://social-nest-backend.onrender.com/api/user/profile', {
           withCredentials: true,
         });
         const currentUserData = profileRes.data;
@@ -26,7 +26,7 @@ const Third = () => {
         const followingList = currentUserData.following || [];
 
         // Fetch suggested users
-        const res = await axios.get('http://localhost:3000/api/auth/suggested', {
+        const res = await axios.get('https://social-nest-backend.onrender.com/api/auth/suggested', {
           withCredentials: true,
         });
         const data = res.data;
@@ -65,7 +65,7 @@ const Third = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/follow/${userId}`,
+        `https://social-nest-backend.onrender.com/api/user/follow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -78,7 +78,7 @@ const Third = () => {
   const handleUnFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/unfollow/${userId}`,
+        `https://social-nest-backend.onrender.com/api/user/unfollow/${userId}`,
         {},
         { withCredentials: true }
       );
