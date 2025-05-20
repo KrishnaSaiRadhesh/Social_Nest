@@ -2,8 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon BackEnd/server.js",
+    "build": "npm install && npm install --prefix FrontEnd && npm run build --prefix FrontEnd",
+    "start": "nodemon BackEnd/server.js"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,7 @@
     "express-fileupload": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.1",
+    "nodemon": "^3.1.10",
     "socket.io": "^4.8.1"
   }
 }

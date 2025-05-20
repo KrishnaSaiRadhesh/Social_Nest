@@ -99,7 +99,7 @@ const Second = () => {
   const handleStoryImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Story file selected:', file.name, file.type, file.size);
+      // console.log('Story file selected:', file.name, file.type, file.size);
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Story file is too large. Maximum size is 5MB.');
         return;
@@ -293,7 +293,7 @@ const Second = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Post file selected:', file.name, file.type, file.size);
+    
       if (file.size > 10 * 1024 * 1024) {
         setMessage('File is too large. Maximum size is 10MB.');
         return;
@@ -309,7 +309,7 @@ const Second = () => {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log('Post file read successfully, type:', file.type);
+        // console.log('Post file read successfully, type:', file.type);
         setPostImage(reader.result);
         setPostPreview(reader.result);
         setMediaType(file.type.startsWith('video/') ? 'video' : 'image');
@@ -332,11 +332,11 @@ const Second = () => {
 
     try {
       setLoading(true);
-      console.log('Sending post:', {
-        description: desc,
-        mediaType,
-        image: postImage.slice(0, 50) + '...',
-      });
+      // console.log('Sending post:', {
+      //   description: desc,
+      //   mediaType,
+      //   image: postImage.slice(0, 50) + '...',
+      // });
       const res = await axios.post(
         'http://localhost:3000/api/posts/CreatePost',
         { description: desc, image: postImage, mediaType },

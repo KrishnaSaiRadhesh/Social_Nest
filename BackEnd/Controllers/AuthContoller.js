@@ -145,7 +145,7 @@ exports.USERSTHATFOLLOW = async (req,res) => {
    try {
       const user_id = req.user._id;
       const users = await userModel.find({followers:user_id})
-      console.log("friends",users)
+      // console.log("friends",users)
       return res.status(200).json(users)
    } catch (error) {
       console.log(error)
@@ -168,15 +168,43 @@ exports.SUGGESTEDUSERS = async(req, res) =>{
 
 exports.GETPROFILE = async (req, res) => {
   try {
-    const user = await userModel
+    let user = await userModel
       .findById(req.user._id)
-      .select("-password") // Exclude password
-      .populate("following", "name image") // Populate following users
-      .populate("followers", "name image") // Populate followers
-      .populate("savedPosts", "description image mediaType user"); // Populate saved posts
+      .select("-password")
+      .populate("following", "name image")
+      .populate("followers", "name image")
+      .populate({
+        path: "savedPosts",
+        select: "description image mediaType user createdAt",
+        populate: { path: "user", select: "name image" },
+      });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    // Filter out invalid savedPosts entries
+    user.savedPosts = user.savedPosts.filter(
+      (post) =>
+        post &&
+        post._id &&
+        post.createdAt &&
+        post.user &&
+        post.user._id &&
+        post.user.name
+    );
+    // Update the user's savedPosts in the database to remove invalid entries
+    user.savedPosts = user.savedPosts.map((post) => post._id);
+    await user.save();
+    // Repopulate savedPosts for the response
+    user = await userModel
+      .findById(req.user._id)
+      .select("-password")
+      .populate("following", "name image")
+      .populate("followers", "name image")
+      .populate({
+        path: "savedPosts",
+        select: "description image mediaType user createdAt",
+        populate: { path: "user", select: "name image" },
+      });
     res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching profile:", error);

@@ -27,12 +27,12 @@ const Posts = ({ posts, setPosts }) => {
         const res = await axios.get('http://localhost:3000/api/user/profile', {
           withCredentials: true,
         });
-        console.log('Profile response:', res.data); // Debug: Log the full response
+        // console.log('Profile response:', res.data); // Debug: Log the full response
         setCurrentUserId(res.data._id);
 
         // Initialize savedPosts based on user's saved posts
         const userSavedPosts = res.data.savedPosts || [];
-        console.log('userSavedPosts:', userSavedPosts); // Debug: Log savedPosts
+        // console.log('userSavedPosts:', userSavedPosts); // Debug: Log savedPosts
 
         const initialSavedPosts = {};
         posts.forEach((post) => {
@@ -145,7 +145,7 @@ const Posts = ({ posts, setPosts }) => {
   const handleEditMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Edit file selected:', file.name, file.type, file.size);
+      // console.log('Edit file selected:', file.name, file.type, file.size);
       if (file.size > 10 * 1024 * 1024) {
         setEditMessage('File is too large. Maximum size is 10MB.');
         return;

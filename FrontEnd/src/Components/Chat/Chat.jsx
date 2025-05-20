@@ -84,7 +84,7 @@ const ChatApp = ({ socket }) => {
   // Socket.io setup
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
+      // console.log('Socket connected:', socket.id);
       if (userId) {
         socket.emit('join', userId);
       }

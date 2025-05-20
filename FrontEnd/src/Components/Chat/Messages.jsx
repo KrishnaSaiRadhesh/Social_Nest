@@ -36,9 +36,9 @@ const ChatApp = ({ socket }) => {
         const res = await axios.get('http://localhost:3000/api/auth/friends', {
           withCredentials: true,
         });
-        console.log(res.data)
+        // console.log(res.data)
         setFriends(res.data);
-        console.log("friends",friends)
+        // console.log("friends",friends)
       } catch (error) {
         console.error('Error fetching friends:', error);
       }
@@ -86,7 +86,7 @@ const ChatApp = ({ socket }) => {
   // Socket.io setup
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
+      // console.log('Socket connected:', socket.id);
       if (userId) {
         socket.emit('join', userId);
       }

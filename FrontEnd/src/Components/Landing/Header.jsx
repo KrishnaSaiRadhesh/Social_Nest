@@ -17,7 +17,7 @@ const Header = () => {
           withCredentials: true,
         });
         const data = res.data;
-        console.log("Image profile",data)
+        // console.log("Image profile", data);
         setImage(data.image);
       } catch (error) {
         console.error("Failed to fetch profile:", error);
@@ -28,7 +28,7 @@ const Header = () => {
       }
     };
 
-      fetchProfile();
+    fetchProfile();
   }, [navigate]);
 
   const toggleModel = () => {
@@ -51,7 +51,7 @@ const Header = () => {
       }
     } catch (error) {
       console.error("Logout failed:", error);
-    }1
+    }
   };
 
   return (
@@ -68,7 +68,9 @@ const Header = () => {
 
       <div className="flex items-center gap-[5em]">
         <IoNotifications size={25} />
-        <FaBookmark size={25} />
+        <Link to="/saved" title="Saved Posts">
+          <FaBookmark size={25} className="cursor-pointer hover:text-blue-500 transition" />
+        </Link>
       </div>
 
       <div className="relative">
@@ -82,7 +84,7 @@ const Header = () => {
 
         {modelopen && (
           <div className="bg-white shadow-xl rounded-xl absolute right-0 mt-2 overflow-hidden w-40 p-3 z-50">
-            <Link to="/Profile">
+            <Link to="/profile">
               <p className="cursor-pointer hover:bg-gray-200 px-2 py-1">My profile</p>
             </Link>
             <p

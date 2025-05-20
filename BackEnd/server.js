@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
 const fileUpload = require('express-fileupload');
+// const path = require('path');
+
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+// const __dirname = path.resolve();
+
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -36,6 +40,11 @@ app.use('/api/posts', require('./Routes/PostRouter'));
 app.use('/api/messages', require('./Routes/MessageRouter'));
 app.use('/api/stories', require('./Routes/StoryRouter')(io));
 
+// app.use(express.static(path.join(__dirname, "/FrontEnd/dist")))
+// app.get('*', (_, res) => {
+//   res.sendFile(path.resolve(__dirname, "FrontEnd", "dist", "index.html"))
+// })
+
 // Socket.IO
 let onlineUsers = [];
 const userSocketMap = new Map(); // Map socket.id to userId
@@ -50,7 +59,7 @@ io.on('connection', (socket) => {
   if (!onlineUsers.includes(userId)) {
     onlineUsers.push(userId);
   }
-  console.log('Current online users:', onlineUsers); // Debug
+  // console.log('Current online users:', onlineUsers); // Debug
   io.emit('onlineUsers', onlineUsers);
 });
 

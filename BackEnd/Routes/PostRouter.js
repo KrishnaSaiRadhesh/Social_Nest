@@ -36,51 +36,65 @@ router.post("/:id/comment", protectRoute, commentOnPost);
 router.put("/:id", protectRoute, UPDATEPOST);
 router.delete("/:id", protectRoute, DELETEPOST);
 
-// New routes for saving and unsaving posts
+
+
+
 router.post("/:id/save", protectRoute, async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
     const user = await userModel.findById(req.user._id);
-    if (!user.savedPosts) {
-      user.savedPosts = [];
+
+    // Avoid saving duplicate post IDs
+    if (!user.savedPosts.includes(post._id)) {
+      user.savedPosts.push(post._id);
+      await user.save();
     }
 
-    if (user.savedPosts.includes(req.params.id)) {
-      return res.status(400).json({ message: "Post already saved" });
-    }
+    // Populate saved posts with full data including user and comments' user
+    const updatedUser = await userModel
+      .findById(req.user._id)
+      .populate({
+        path: "savedPosts",
+        populate: [
+          { path: "user", select: "name image" }, // populate post author
+          { path: "comments.user", select: "name image" } // populate commenters
+        ]
+      });
 
-    user.savedPosts.push(req.params.id);
-    await user.save();
-
-    res.status(200).json({ saved: true, savedPosts: user.savedPosts });
+    res.status(200).json({ saved: true, savedPosts: updatedUser.savedPosts });
   } catch (err) {
     console.error("Error in /:id/save:", err);
     res.status(500).json({ message: err.message });
   }
 });
 
+
+
+
 router.post("/:id/unsave", protectRoute, async (req, res) => {
   try {
-    const post = await PostModel.findById(req.params.id);
+    const postId = req.params.id;
+    // Validate postId
+    if (!postId || postId === "undefined") {
+      return res.status(400).json({ message: "Invalid post ID" });
+    }
+    const post = await PostModel.findById(postId);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    const user = await userModel.findById(req.user._id);
-    if (!user.savedPosts) {
-      user.savedPosts = [];
-    }
+    const userId = req.user._id;
+    const user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!user.savedPosts.includes(req.params.id)) {
+    if (!user.savedPosts.includes(postId)) {
       return res.status(400).json({ message: "Post not saved" });
     }
 
-    user.savedPosts = user.savedPosts.filter(
-      (postId) => postId.toString() !== req.params.id
-    );
+    user.savedPosts.pull(postId);
     await user.save();
 
-    res.status(200).json({ saved: false, savedPosts: user.savedPosts });
+    res.status(200).json({ saved: false });
   } catch (err) {
     console.error("Error in /:id/unsave:", err);
     res.status(500).json({ message: err.message });

@@ -29,7 +29,7 @@ router.post('/', protectRoute, async (req, res) => {
 
     // Check if an image was uploaded
     if (req.files && req.files.image) {
-      console.log('File received:', req.files.image); // Debug
+      // console.log('File received:', req.files.image); // Debug
       const file = req.files.image;
 
       // Validate file type
@@ -66,7 +66,7 @@ router.post('/', protectRoute, async (req, res) => {
     });
 
     await message.save();
-    console.log('Saved message:', message); // Debug
+    // console.log('Saved message:', message); // Debug
     res.status(201).json(message);
   } catch (error) {
     console.error('Error:', error.message); // Debug

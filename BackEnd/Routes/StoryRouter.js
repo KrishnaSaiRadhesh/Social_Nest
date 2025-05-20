@@ -119,17 +119,17 @@ module.exports = (io) => {
         return res.status(400).json({ message: 'Description must be 200 characters or less.' });
       }
 
-      console.log('Creating story:', { userId, mediaType, description, media: media.slice(0, 50) + '...' });
+      // console.log('Creating story:', { userId, mediaType, description, media: media.slice(0, 50) + '...' });
       const mediaUpload = await cloudinary.uploader.upload(media, {
         resource_type: 'image',
         timeout: 60000,
       });
-      console.log('Cloudinary response:', {
-        secure_url: mediaUpload.secure_url,
-        public_id: mediaUpload.public_id,
-        resource_type: mediaUpload.resource_type,
-        format: mediaUpload.format,
-      });
+      // console.log('Cloudinary response:', {
+      //   secure_url: mediaUpload.secure_url,
+      //   public_id: mediaUpload.public_id,
+      //   resource_type: mediaUpload.resource_type,
+      //   format: mediaUpload.format,
+      // });
 
       const story = new Story({
         userId,
@@ -186,21 +186,21 @@ module.exports = (io) => {
         return res.status(403).json({ message: 'You can only update your own stories' });
       }
 
-      console.log('Updating story:', { id, userId, mediaType, description, media: media.slice(0, 50) + '...' });
+      // console.log('Updating story:', { id, userId, mediaType, description, media: media.slice(0, 50) + '...' });
       const mediaUpload = await cloudinary.uploader.upload(media, {
         resource_type: 'image',
         timeout: 60000,
       });
-      console.log('Cloudinary response:', {
-        secure_url: mediaUpload.secure_url,
-        public_id: mediaUpload.public_id,
-        resource_type: mediaUpload.resource_type,
-        format: mediaUpload.format,
-      });
+      // console.log('Cloudinary response:', {
+      //   secure_url: mediaUpload.secure_url,
+      //   public_id: mediaUpload.public_id,
+      //   resource_type: mediaUpload.resource_type,
+      //   format: mediaUpload.format,
+      // });
 
       if (story.mediaPublicId) {
         await cloudinary.uploader.destroy(story.mediaPublicId, { resource_type: 'image' });
-        console.log('Deleted old media from Cloudinary:', story.mediaPublicId);
+        // console.log('Deleted old media from Cloudinary:', story.mediaPublicId);
       }
 
       story.media = mediaUpload.secure_url;
@@ -237,7 +237,7 @@ module.exports = (io) => {
 
       if (story.mediaPublicId) {
         await cloudinary.uploader.destroy(story.mediaPublicId, { resource_type: 'image' });
-        console.log('Deleted media from Cloudinary:', story.mediaPublicId);
+        // console.log('Deleted media from Cloudinary:', story.mediaPublicId);
       }
 
       await Story.findByIdAndDelete(id);
