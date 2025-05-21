@@ -100,7 +100,7 @@ exports.LOGIN = async (req, res) => {
             .cookie("token", token, {
                 httpOnly: true,
                   secure: true, // ✅ Required for SameSite=None on HTTPS
-  sameSite: "None",
+                  sameSite: "None",
                 maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days
             })
             .json({

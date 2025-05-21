@@ -87,7 +87,7 @@ const ChatApp = ({ socket }) => {
           console.error("Error fetching messages:", error);
         }
       } else {
-        setMessages([]); // Clear messages when no friendId
+        setMessages([]); 
       }
     };
     fetchMessages();
