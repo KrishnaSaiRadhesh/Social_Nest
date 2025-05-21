@@ -12,11 +12,16 @@ const fileUpload = require('express-fileupload');
 
 dotenv.config();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://funny-pony-68b842.netlify.app'
+];
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://funny-pony-68b842.netlify.app ',
+    allowedOrigins,
     credentials: true,
   },
 });
@@ -28,7 +33,7 @@ app.use(cookieParser());
 app.use(fileUpload());
 
 const corsOptions = {
-  origin: 'https://funny-pony-68b842.netlify.app ',
+  allowedOrigins,
   credentials: true,
 };
 app.use(cors(corsOptions));
