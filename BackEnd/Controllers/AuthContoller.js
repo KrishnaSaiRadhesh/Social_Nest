@@ -99,7 +99,8 @@ exports.LOGIN = async (req, res) => {
             .status(200)
             .cookie("token", token, {
                 httpOnly: true,
-                sameSite: "strict",
+                  secure: true, // ✅ Required for SameSite=None on HTTPS
+  sameSite: "None",
                 maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days
             })
             .json({
