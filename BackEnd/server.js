@@ -9,6 +9,7 @@ const { Server } = require('socket.io');
 const fileUpload = require('express-fileupload');
 
 
+
 dotenv.config();
 
 const app = express();
@@ -37,6 +38,7 @@ app.use('/api/user', require('./Routes/UserRoute'));
 app.use('/api/posts', require('./Routes/PostRouter'));
 app.use('/api/messages', require('./Routes/MessageRouter'));
 app.use('/api/stories', require('./Routes/StoryRouter')(io));
+
 
 
 // Socket.IO
