@@ -59,51 +59,62 @@ exports.SIGNUP = async (req, res) => {
 }
 
 
-exports.LOGIN = async(req, res) =>{
-    const {email, password} = req.body
+
+
+exports.LOGIN = async (req, res) => {
+    const { email, password } = req.body;
 
     try {
-        if(!email || !password){
-            return res.status(400).json({message: "All fields are required ", success:false})
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: "All fields are required", success: false });
         }
 
-        const user = await userModel.findOne({email})
-        if(!user){
-            return res.status(400).json({message: "Invalid email or password", success:false})
+        // Find user
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or password", success: false });
         }
 
-        const isPasswordMatch = await bcrypt.compare(password, user.password)
-        if(!isPasswordMatch){
-            return res.status(400).json({message: "Invaild crrdentials", success:false})
+        // Check password
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({ message: "Invalid credentials", success: false });
         }
 
+        // Generate JWT
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "10d"
+        });
 
-        
-        const token = await jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: "10d"})  // Here 
-
+        // Prepare user data
         const UserData = {
             _id: user._id,
             name: user.name,
             email: user.email
-        }
+        };
 
-        return res.cookie("token", token, {
-            httpOnly: true,
-            sameSite: "strict",
-            maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days in ms
-
-        }).json({
-            message: `WELCOME back ${UserData.name}`,
-            success: true,
-            user: UserData
-        })
+        // Set cookie and respond
+        return res
+            .status(200)
+            .cookie("token", token, {
+                httpOnly: true,
+                sameSite: "strict",
+                maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days
+            })
+            .json({
+                message: `Welcome back ${UserData.name}`,
+                success: true,
+                user: UserData,
+                token 
+            });
 
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({error: "Signup error"})
+        console.error(error);
+        return res.status(500).json({ error: "Login error", success: false });
     }
-    
-}
+};
+
 
 
 exports.LOGOUT = async (req, res) => {
