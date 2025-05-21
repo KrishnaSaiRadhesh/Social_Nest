@@ -14,7 +14,7 @@
 // import Friends from './Components/Landing/Friends';
 
 // // Use port 5000 to match your original backend
-// const socket = io('http://localhost:3000', { withCredentials: true });
+// const socket = io('https://social-nest-backend.onrender.com', { withCredentials: true });
 
 // const App = () => {
 //   return (
@@ -51,7 +51,9 @@ import Chat from "./Components/Chat/Chat";
 import io from "socket.io-client";
 import SavedPost from "./Components/Landing/SavedPost";
 
-const socket = io("http://localhost:3000", { withCredentials: true });
+const socket = io("https://social-nest-backend.onrender.com", {
+  withCredentials: true,
+});
 
 const App = () => {
   return (

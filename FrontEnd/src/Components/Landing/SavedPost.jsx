@@ -13,9 +13,12 @@ const SavedPosts = () => {
     const fetchSavedPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:3000/api/user/profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/user/profile",
+          {
+            withCredentials: true,
+          }
+        );
         // console.log('Saved posts response:', res.data.savedPosts);
         // Filter out null or invalid entries, ensuring required fields are present
         const validPosts = (res.data.savedPosts || []).filter(
@@ -58,7 +61,7 @@ const SavedPosts = () => {
       await Promise.all(
         validPosts.map((post) =>
           axios.post(
-            `http://localhost:3000/api/posts/${post._id}/unsave`,
+            `https://social-nest-backend.onrender.com/api/posts/${post._id}/unsave`,
             {},
             { withCredentials: true }
           )

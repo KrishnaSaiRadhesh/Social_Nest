@@ -13,9 +13,12 @@ const Header = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/user/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
         console.log("Image profile", data);
         setImage(data.image);
@@ -38,7 +41,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "https://social-nest-backend.onrender.com/api/auth/logout",
         {},
         { withCredentials: true }
       );

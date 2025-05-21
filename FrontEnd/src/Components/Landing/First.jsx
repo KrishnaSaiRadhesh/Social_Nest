@@ -18,9 +18,12 @@ const First = ({ socket }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/user/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
         setName(data.name);
         setEmail(data.email);
@@ -126,16 +129,15 @@ const First = ({ socket }) => {
       </div>
 
       <div className="absolute lg:hidden  bottom-0 bg-white border p-2 w-[100vw]">
-         <ul className="flex gap-4 justify-between">
+        <ul className="flex gap-4 justify-between">
           <li>feed</li>
           <li> friends</li>
           <li>messages</li>
           <li>photos</li>
           <li>videos</li>
-         </ul>
+        </ul>
       </div>
     </div>
-
   );
 };
 

@@ -15,9 +15,12 @@ const Friends = () => {
     const fetchAllUsers = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/friends", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/friends",
+          {
+            withCredentials: true,
+          }
+        );
 
         const data = res.data;
         const validUsers = data.filter(
@@ -27,7 +30,7 @@ const Friends = () => {
         setFilteredUsers(validUsers);
 
         const profileRes = await axios.get(
-          "http://localhost:3000/api/user/profile",
+          "https://social-nest-backend.onrender.com/api/user/profile",
           {
             withCredentials: true,
           }
@@ -58,7 +61,7 @@ const Friends = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/follow/${userId}`,
+        `https://social-nest-backend.onrender.com/api/user/follow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -71,7 +74,7 @@ const Friends = () => {
   const handleUnFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/unfollow/${userId}`,
+        `https://social-nest-backend.onrender.com/api/user/unfollow/${userId}`,
         {},
         { withCredentials: true }
       );

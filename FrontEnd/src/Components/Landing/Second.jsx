@@ -7,7 +7,9 @@ import Posts from "./Posts";
 import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3000", { withCredentials: true });
+const socket = io("https://social-nest-backend.onrender.com", {
+  withCredentials: true,
+});
 
 const Second = () => {
   const [desc, setDesc] = useState("");
@@ -35,9 +37,12 @@ const Second = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/user/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         setProfileImage(res.data.image);
         setCurrentUserId(res.data._id);
       } catch (error) {
@@ -51,9 +56,12 @@ const Second = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/stories", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/stories",
+          {
+            withCredentials: true,
+          }
+        );
         setStories(res.data);
         console.log("Fetching stories data:", res.data);
       } catch (error) {
@@ -78,9 +86,12 @@ const Second = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:3000/api/posts", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/posts",
+          {
+            withCredentials: true,
+          }
+        );
         setPosts(
           res.data.map((post) => ({
             ...post,
@@ -160,7 +171,7 @@ const Second = () => {
     try {
       setLoading(true);
       await axios.post(
-        "http://localhost:3000/api/stories/create",
+        "https://social-nest-backend.onrender.com/api/stories/create",
         {
           media: storyImage,
           mediaType: "image",
@@ -195,7 +206,7 @@ const Second = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `http://localhost:3000/api/stories/${editingStory}`,
+        `https://social-nest-backend.onrender.com/api/stories/${editingStory}`,
         {
           media: editStoryImage,
           mediaType: "image",
@@ -247,9 +258,12 @@ const Second = () => {
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3000/api/stories/${storyId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://social-nest-backend.onrender.com/api/stories/${storyId}`,
+        {
+          withCredentials: true,
+        }
+      );
       setStories((prevStories) =>
         prevStories.filter((story) => story._id !== storyId)
       );
@@ -281,7 +295,7 @@ const Second = () => {
     setStoryIndex(index);
     try {
       await axios.post(
-        `http://localhost:3000/api/stories/${userStories[index]._id}/view`,
+        `https://social-nest-backend.onrender.com/api/stories/${userStories[index]._id}/view`,
         {},
         { withCredentials: true }
       );
@@ -363,7 +377,7 @@ const Second = () => {
       //   image: postImage.slice(0, 50) + '...',
       // });
       const res = await axios.post(
-        "http://localhost:3000/api/posts/CreatePost",
+        "https://social-nest-backend.onrender.com/api/posts/CreatePost",
         { description: desc, image: postImage, mediaType },
         {
           headers: { "Content-Type": "application/json" },

@@ -26,7 +26,7 @@ const CreatePost = ({ onPostCreated }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/posts/CreatePost",
+        "https://social-nest-backend.onrender.com/api/posts/CreatePost",
         { description: desc, image },
         {
           headers: { "Content-Type": "application/json" },
