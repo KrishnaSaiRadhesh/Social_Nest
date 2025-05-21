@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
-import { FaEdit, FaRegComment, FaTrash } from 'react-icons/fa';
-import { RiShareForwardLine } from 'react-icons/ri';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
+import { FaEdit, FaRegComment, FaTrash } from "react-icons/fa";
+import { RiShareForwardLine } from "react-icons/ri";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 
 const Posts = ({ posts, setPosts }) => {
   const [loading, setLoading] = useState(true); // Start with loading true
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [likes, setLikes] = useState({});
   const [commentText, setCommentText] = useState({});
   const [editingPost, setEditingPost] = useState(null);
-  const [editDesc, setEditDesc] = useState('');
-  const [editMedia, setEditMedia] = useState('');
-  const [editMediaType, setEditMediaType] = useState('image');
-  const [editMessage, setEditMessage] = useState('');
+  const [editDesc, setEditDesc] = useState("");
+  const [editMedia, setEditMedia] = useState("");
+  const [editMediaType, setEditMediaType] = useState("image");
+  const [editMessage, setEditMessage] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
   const [showComments, setShowComments] = useState({});
   const [savedPosts, setSavedPosts] = useState({});
@@ -24,21 +24,20 @@ const Posts = ({ posts, setPosts }) => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/user/profile', {
+        const res = await axios.get("http://localhost:3000/api/user/profile", {
           withCredentials: true,
         });
-        // console.log('Profile response:', res.data); // Debug: Log the full response
+        console.log("Profile response:", res.data); // Debug: Log the full response
         setCurrentUserId(res.data._id);
-
         // Initialize savedPosts based on user's saved posts
         const userSavedPosts = res.data.savedPosts || [];
-        // console.log('userSavedPosts:', userSavedPosts); // Debug: Log savedPosts
+        console.log("userSavedPosts:", userSavedPosts); // Debug: Log savedPosts
 
         const initialSavedPosts = {};
         posts.forEach((post) => {
           // Handle both populated objects and raw IDs
           initialSavedPosts[post._id] = userSavedPosts.some((savedPost) => {
-            if (typeof savedPost === 'string') {
+            if (typeof savedPost === "string") {
               // If savedPost is a raw ID (string)
               return savedPost === post._id;
             } else if (savedPost && savedPost._id) {
@@ -50,8 +49,8 @@ const Posts = ({ posts, setPosts }) => {
         });
         setSavedPosts(initialSavedPosts);
       } catch (error) {
-        console.error('Error fetching user:', error);
-        setError('Please log in to continue.');
+        console.error("Error fetching user:", error);
+        setError("Please log in to continue.");
       } finally {
         setLoading(false);
       }
@@ -74,29 +73,32 @@ const Posts = ({ posts, setPosts }) => {
   const commentSubmit = async (postId) => {
     try {
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
-        { commentText: commentText[postId] || '' },
+        `http://localhost:3000/api/posts/${postId}/comment`,
+        { commentText: commentText[postId] || "" },
         { withCredentials: true }
       );
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post._id === postId
-            ? { ...post, comments: [...(post.comments || []), res.data.comment] }
+            ? {
+                ...post,
+                comments: [...(post.comments || []), res.data.comment],
+              }
             : post
         )
       );
-      setCommentText((prev) => ({ ...prev, [postId]: '' }));
-      alert('Commented successfully');
+      setCommentText((prev) => ({ ...prev, [postId]: "" }));
+      alert("Commented successfully");
     } catch (error) {
-      console.error('Error commenting:', error);
-      alert(error.response?.data?.message || 'Failed to comment.');
+      console.error("Error commenting:", error);
+      alert(error.response?.data?.message || "Failed to comment.");
     }
   };
 
   const handleLike = async (id) => {
     try {
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
+        `http://localhost:3000/api/posts/${id}/like`,
         {},
         { withCredentials: true }
       );
@@ -109,17 +111,17 @@ const Posts = ({ posts, setPosts }) => {
       );
       setLikes((prevLikes) => ({ ...prevLikes, [id]: res.data.liked }));
     } catch (err) {
-      console.error('Like failed:', err);
-      alert(err.response?.data?.message || 'Failed to like post.');
+      console.error("Like failed:", err);
+      alert(err.response?.data?.message || "Failed to like post.");
     }
   };
 
   const handleSave = async (postId) => {
     try {
       const isSaved = savedPosts[postId];
-      const endpoint = isSaved ? 'unsave' : 'save';
+      const endpoint = isSaved ? "unsave" : "save";
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}/${endpoint}`,
+        `http://localhost:3000/api/posts/${postId}/${endpoint}`,
         {},
         { withCredentials: true }
       );
@@ -127,10 +129,16 @@ const Posts = ({ posts, setPosts }) => {
         ...prevSaved,
         [postId]: res.data.saved,
       }));
-      alert(res.data.saved ? 'Post saved!' : 'Post unsaved!');
+      alert(res.data.saved ? "Post saved!" : "Post unsaved!");
     } catch (error) {
-      console.error(`Error ${savedPosts[postId] ? 'unsaving' : 'saving'} post:`, error);
-      alert(error.response?.data?.message || `Failed to ${savedPosts[postId] ? 'unsave' : 'save'} post.`);
+      console.error(
+        `Error ${savedPosts[postId] ? "unsaving" : "saving"} post:`,
+        error
+      );
+      alert(
+        error.response?.data?.message ||
+          `Failed to ${savedPosts[postId] ? "unsave" : "save"} post.`
+      );
     }
   };
 
@@ -138,34 +146,39 @@ const Posts = ({ posts, setPosts }) => {
     setEditingPost(post._id);
     setEditDesc(post.description);
     setEditMedia(post.image);
-    setEditMediaType(post.mediaType || 'image');
-    setEditMessage('');
+    setEditMediaType(post.mediaType || "image");
+    setEditMessage("");
   };
 
   const handleEditMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // console.log('Edit file selected:', file.name, file.type, file.size);
+      console.log("Edit file selected:", file.name, file.type, file.size);
       if (file.size > 10 * 1024 * 1024) {
-        setEditMessage('File is too large. Maximum size is 10MB.');
+        setEditMessage("File is too large. Maximum size is 10MB.");
         return;
       }
-      const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-      if (file.type.startsWith('video/') && !validVideoTypes.includes(file.type)) {
-        setEditMessage('Unsupported video format. Please use MP4, WebM, or OGG.');
+      const validVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
+      if (
+        file.type.startsWith("video/") &&
+        !validVideoTypes.includes(file.type)
+      ) {
+        setEditMessage(
+          "Unsupported video format. Please use MP4, WebM, or OGG."
+        );
         return;
       }
-      if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-        setEditMessage('Please select a valid image or video file.');
+      if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+        setEditMessage("Please select a valid image or video file.");
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
         setEditMedia(reader.result);
-        setEditMediaType(file.type.startsWith('video/') ? 'video' : 'image');
+        setEditMediaType(file.type.startsWith("video/") ? "video" : "image");
       };
       reader.onerror = () => {
-        setEditMessage('Error reading file.');
+        setEditMessage("Error reading file.");
       };
       reader.readAsDataURL(file);
     }
@@ -173,43 +186,45 @@ const Posts = ({ posts, setPosts }) => {
 
   const handleUpdate = async (postId) => {
     if (!editDesc || !editMedia) {
-      setEditMessage('Please provide a description and media.');
+      setEditMessage("Please provide a description and media.");
       return;
     }
     try {
       const res = await axios.put(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
+        `http://localhost:3000/api/posts/${postId}`,
         { description: editDesc, image: editMedia, mediaType: editMediaType },
         { withCredentials: true }
       );
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
-          post._id === postId ? { ...res.data.updatedPost, liked: post.liked } : post
+          post._id === postId
+            ? { ...res.data.updatedPost, liked: post.liked }
+            : post
         )
       );
       setEditingPost(null);
-      setEditDesc('');
-      setEditMedia('');
-      setEditMediaType('image');
-      setEditMessage('');
-      alert('Post updated successfully');
+      setEditDesc("");
+      setEditMedia("");
+      setEditMediaType("image");
+      setEditMessage("");
+      alert("Post updated successfully");
     } catch (error) {
-      console.error('Error updating post:', error);
-      setEditMessage(error.response?.data?.message || 'Failed to update post.');
+      console.error("Error updating post:", error);
+      setEditMessage(error.response?.data?.message || "Failed to update post.");
     }
   };
 
   const handleDelete = async (postId) => {
-    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      await axios.delete(`https://social-nest-backend.onrender.com/api/posts/${postId}`, {
+      await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
         withCredentials: true,
       });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-      alert('Post deleted successfully');
+      alert("Post deleted successfully");
     } catch (error) {
-      console.error('Error deleting post:', error);
-      alert(error.response?.data?.message || 'Failed to delete post.');
+      console.error("Error deleting post:", error);
+      alert(error.response?.data?.message || "Failed to delete post.");
     }
   };
 
@@ -229,7 +244,11 @@ const Posts = ({ posts, setPosts }) => {
   }
 
   if (!currentUserId) {
-    return <p className="text-center text-red-500">User not authenticated. Please log in.</p>;
+    return (
+      <p className="text-center text-red-500">
+        User not authenticated. Please log in.
+      </p>
+    );
   }
 
   return (
@@ -240,25 +259,31 @@ const Posts = ({ posts, setPosts }) => {
             <div className="flex items-center justify-between p-2">
               <div className="flex items-center gap-3">
                 <img
-                  src={post.user?.image || '/Profile.png'}
+                  src={post.user?.image || "/Profile.png"}
                   alt="User"
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <h1 className="font-semibold text-lg text-gray-800">{post.user?.name || 'Unknown'}</h1>
+                  <h1 className="font-semibold text-lg text-gray-800">
+                    {post.user?.name || "Unknown"}
+                  </h1>
                   <p className="text-sm text-gray-500">
-                    {new Date(post.createdAt).toLocaleString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    }).replace(',', ' at')}
+                    {new Date(post.createdAt)
+                      .toLocaleString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace(",", " at")}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                {post.user?._id && currentUserId && String(post.user._id) === String(currentUserId) ? (
+                {post.user?._id &&
+                currentUserId &&
+                String(post.user._id) === String(currentUserId) ? (
                   <>
                     <button
                       onClick={() => handleEdit(post)}
@@ -284,7 +309,9 @@ const Posts = ({ posts, setPosts }) => {
             </div>
             {editingPost === post._id ? (
               <div className="p-4 bg-gray-100 rounded-lg">
-                {editMessage && <p className="text-red-500 mb-4">{editMessage}</p>}
+                {editMessage && (
+                  <p className="text-red-500 mb-4">{editMessage}</p>
+                )}
                 <textarea
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
@@ -299,7 +326,7 @@ const Posts = ({ posts, setPosts }) => {
                 />
                 {editMedia && (
                   <div className="mb-4">
-                    {editMediaType === 'image' ? (
+                    {editMediaType === "image" ? (
                       <img
                         src={editMedia}
                         alt="Preview"
@@ -331,8 +358,12 @@ const Posts = ({ posts, setPosts }) => {
               </div>
             ) : (
               <div className="flex flex-col">
-                {post.description && <p className="p-4 text-lg text-gray-800">{post.description}</p>}
-                {post.mediaType === 'video' ? (
+                {post.description && (
+                  <p className="p-4 text-lg text-gray-800">
+                    {post.description}
+                  </p>
+                )}
+                {post.mediaType === "video" ? (
                   <video
                     src={post.image}
                     controls
@@ -357,7 +388,7 @@ const Posts = ({ posts, setPosts }) => {
                       ) : (
                         <IoMdHeartEmpty className="text-xl" />
                       )}
-                      <h5>{likes[post._id] ? 'Liked' : 'Like'}</h5>
+                      <h5>{likes[post._id] ? "Liked" : "Like"}</h5>
                       <p>{post.likes?.length || 0}</p>
                     </div>
                     <div
@@ -376,7 +407,7 @@ const Posts = ({ posts, setPosts }) => {
                   <div
                     className="cursor-pointer"
                     onClick={() => handleSave(post._id)}
-                    title={savedPosts[post._id] ? 'Unsave Post' : 'Save Post'}
+                    title={savedPosts[post._id] ? "Unsave Post" : "Save Post"}
                   >
                     {savedPosts[post._id] ? (
                       <FaBookmark className="text-xl text-blue-500" />
@@ -388,9 +419,12 @@ const Posts = ({ posts, setPosts }) => {
                 <div className="mt-2 px-4">
                   <input
                     type="text"
-                    value={commentText[post._id] || ''}
+                    value={commentText[post._id] || ""}
                     onChange={(e) =>
-                      setCommentText((prev) => ({ ...prev, [post._id]: e.target.value }))
+                      setCommentText((prev) => ({
+                        ...prev,
+                        [post._id]: e.target.value,
+                      }))
                     }
                     placeholder="Add a comment..."
                     className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -405,20 +439,23 @@ const Posts = ({ posts, setPosts }) => {
                 {showComments[post._id] && (
                   <div className="mt-2 px-4 transition-all duration-300">
                     {post.comments?.map((comment, idx) => (
-                      <div key={idx} className="mt-2 flex items-center gap-2 text-sm text-gray-700">
+                      <div
+                        key={idx}
+                        className="mt-2 flex items-center gap-2 text-sm text-gray-700"
+                      >
                         <img
-                          src={comment.user?.image || '/Profile.png'}
+                          src={comment.user?.image || "/Profile.png"}
                           alt="User"
                           className="h-8 w-8 rounded-full object-cover"
                         />
-                        <strong>{comment.user?.name || 'User'}:</strong>
+                        <strong>{comment.user?.name || "User"}:</strong>
                         <span>{comment.commentText}</span>
                         <span className="text-xs text-gray-500">
-                          {new Date(comment.createdAt).toLocaleString('en-GB', {
-                            day: 'numeric',
-                            month: 'short',
-                            hour: 'numeric',
-                            minute: '2-digit',
+                          {new Date(comment.createdAt).toLocaleString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            hour: "numeric",
+                            minute: "2-digit",
                             hour12: true,
                           })}
                         </span>

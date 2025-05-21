@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { FiSearch } from 'react-icons/fi';
-import { IoFilterSharp } from 'react-icons/io5';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { FiSearch } from "react-icons/fi";
+import { IoFilterSharp } from "react-icons/io5";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Third = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +10,7 @@ const Third = () => {
   const [following, setFollowing] = useState({});
   const [currentUserId, setCurrentUserId] = useState(null); // Store logged-in user's ID
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
@@ -18,22 +18,31 @@ const Third = () => {
       setLoading(true);
       try {
         // Fetch current user's profile to get their ID and following list
-        const profileRes = await axios.get('https://social-nest-backend.onrender.com/api/user/profile', {
-          withCredentials: true,
-        });
+        const profileRes = await axios.get(
+          "http://localhost:3000/api/user/profile",
+          {
+            withCredentials: true,
+          }
+        );
         const currentUserData = profileRes.data;
         setCurrentUserId(currentUserData._id); // Store logged-in user's ID
         const followingList = currentUserData.following || [];
 
         // Fetch suggested users
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/auth/suggested', {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "http://localhost:3000/api/auth/suggested",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
 
         // Filter out users with invalid or missing _id and exclude the logged-in user
         const validUsers = data.filter(
-          (user) => user._id && user._id !== 'undefined' && user._id !== currentUserData._id
+          (user) =>
+            user._id &&
+            user._id !== "undefined" &&
+            user._id !== currentUserData._id
         );
 
         setUsers(validUsers);
@@ -46,7 +55,7 @@ const Third = () => {
         });
         setFollowing(followStatus);
       } catch (error) {
-        console.log('Error fetching users:', error);
+        console.log("Error fetching users:", error);
       } finally {
         setLoading(false);
       }
@@ -65,39 +74,39 @@ const Third = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `https://social-nest-backend.onrender.com/api/user/follow/${userId}`,
+        `http://localhost:3000/api/user/follow/${userId}`,
         {},
         { withCredentials: true }
       );
       setFollowing((prev) => ({ ...prev, [userId]: true }));
     } catch (error) {
-      console.log('Error following user:', error);
+      console.log("Error following user:", error);
     }
   };
 
   const handleUnFollow = async (userId) => {
     try {
       await axios.post(
-        `https://social-nest-backend.onrender.com/api/user/unfollow/${userId}`,
+        `http://localhost:3000/api/user/unfollow/${userId}`,
         {},
         { withCredentials: true }
       );
       setFollowing((prev) => ({ ...prev, [userId]: false }));
     } catch (error) {
-      console.log('Error unfollowing user:', error);
+      console.log("Error unfollowing user:", error);
     }
   };
 
   const handleUserClick = (userId) => {
-    if (userId && userId !== 'undefined') {
+    if (userId && userId !== "undefined") {
       navigate(`/profile/${userId}`);
     } else {
-      console.error('Invalid userId:', userId);
+      console.error("Invalid userId:", userId);
     }
   };
 
   return (
-    <div className="p-4 h-screen bg-white shadow-lg">
+    <div className="p-4 h-screen bg-white shadow-lg hidden lg:block ">
       <div className="p-3 flex items-center gap-3 justify-between w-full mt-1">
         <h2 className="text-lg font-medium">Suggested for you</h2>
       </div>
@@ -125,10 +134,13 @@ const Third = () => {
               <p>No valid users found</p>
             ) : (
               filteredUsers.map((user) => (
-                <div key={user._id} className="flex items-center justify-between gap-5 px-5">
+                <div
+                  key={user._id}
+                  className="flex items-center justify-between gap-5 px-5"
+                >
                   <div className="flex items-center gap-2">
                     <img
-                      src={user.image || '/Profile.png'}
+                      src={user.image || "/Profile.png"}
                       alt=""
                       className="w-10 h-10 rounded-full cursor-pointer"
                       onClick={() => handleUserClick(user._id)}
@@ -142,7 +154,7 @@ const Third = () => {
                   </div>
                   <button
                     className={`p-2 rounded text-white ${
-                      following[user._id] ? 'bg-red-500' : 'bg-blue-500'
+                      following[user._id] ? "bg-red-500" : "bg-blue-500"
                     }`}
                     onClick={() =>
                       following[user._id]
@@ -150,7 +162,7 @@ const Third = () => {
                         : handleFollow(user._id)
                     }
                   >
-                    {following[user._id] ? 'Unfollow' : 'Follow'}
+                    {following[user._id] ? "Unfollow" : "Follow"}
                   </button>
                 </div>
               ))

@@ -28,7 +28,7 @@ const Signup = () => {
 
     try {
       const res = await axios.post(
-        "https://social-nest-backend.onrender.com/api/auth/signup",
+        "http://localhost:3000/api/auth/signup",
         formData,
         {
           headers: {

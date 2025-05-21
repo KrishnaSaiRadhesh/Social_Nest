@@ -18,7 +18,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -27,7 +27,7 @@ const UserProfile = () => {
           withCredentials: true,
         });
         const profileData = profileRes.data;
-   
+
         setName(profileData.name);
         setEmail(profileData.email);
         setImage(profileData.image);

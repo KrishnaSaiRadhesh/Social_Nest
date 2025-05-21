@@ -1,48 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { FaRegSmile } from 'react-icons/fa';
-import { CiImageOn } from 'react-icons/ci';
-import { BsThreeDotsVertical, BsPencilSquare, BsTrash } from 'react-icons/bs';
-import Posts from './Posts';
-import { toast, ToastContainer } from 'react-toastify';
-import io from 'socket.io-client';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { FaRegSmile } from "react-icons/fa";
+import { CiImageOn } from "react-icons/ci";
+import { BsThreeDotsVertical, BsPencilSquare, BsTrash } from "react-icons/bs";
+import Posts from "./Posts";
+import { toast, ToastContainer } from "react-toastify";
+import io from "socket.io-client";
 
-const socket = io('https://social-nest-backend.onrender.com', { withCredentials: true });
+const socket = io("http://localhost:3000", { withCredentials: true });
 
 const Second = () => {
-  const [desc, setDesc] = useState('');
-  const [postImage, setPostImage] = useState('');
-  const [postPreview, setPostPreview] = useState('');
-  const [mediaType, setMediaType] = useState('image');
-  const [message, setMessage] = useState('');
+  const [desc, setDesc] = useState("");
+  const [postImage, setPostImage] = useState("");
+  const [postPreview, setPostPreview] = useState("");
+  const [mediaType, setMediaType] = useState("image");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState("");
   const [posts, setPosts] = useState([]);
-  const [storyImage, setStoryImage] = useState('');
-  const [storyPreview, setStoryPreview] = useState('');
-  const [storyDescription, setStoryDescription] = useState('');
+  const [storyImage, setStoryImage] = useState("");
+  const [storyPreview, setStoryPreview] = useState("");
+  const [storyDescription, setStoryDescription] = useState("");
   const [stories, setStories] = useState([]);
   const [currentStory, setCurrentStory] = useState(null);
   const [storyIndex, setStoryIndex] = useState(0);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [editingStory, setEditingStory] = useState(null);
-  const [editStoryImage, setEditStoryImage] = useState('');
-  const [editStoryPreview, setEditStoryPreview] = useState('');
-  const [editStoryDescription, setEditStoryDescription] = useState('');
+  const [editStoryImage, setEditStoryImage] = useState("");
+  const [editStoryPreview, setEditStoryPreview] = useState("");
+  const [editStoryDescription, setEditStoryDescription] = useState("");
   const [showStoryMenu, setShowStoryMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/user/Profile', {
+        const res = await axios.get("http://localhost:3000/api/user/Profile", {
           withCredentials: true,
         });
         setProfileImage(res.data.image);
         setCurrentUserId(res.data._id);
       } catch (error) {
-        console.log('Error fetching profile:', error);
-        toast.error('Please log in to continue.');
+        console.log("Error fetching profile:", error);
+        toast.error("Please log in to continue.");
       }
     };
     fetchProfile();
@@ -51,26 +51,26 @@ const Second = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/stories', {
+        const res = await axios.get("http://localhost:3000/api/stories", {
           withCredentials: true,
         });
         setStories(res.data);
-        console.log('Fetching stories data:', res.data);
+        console.log("Fetching stories data:", res.data);
       } catch (error) {
-        console.log('Error fetching stories:', error);
-        toast.error('Failed to load stories.');
+        console.log("Error fetching stories:", error);
+        toast.error("Failed to load stories.");
       }
     };
     fetchStories();
 
-    socket.on('newStory', fetchStories);
-    socket.on('updateStory', fetchStories);
-    socket.on('deleteStory', fetchStories);
+    socket.on("newStory", fetchStories);
+    socket.on("updateStory", fetchStories);
+    socket.on("deleteStory", fetchStories);
 
     return () => {
-      socket.off('newStory');
-      socket.off('updateStory');
-      socket.off('deleteStory');
+      socket.off("newStory");
+      socket.off("updateStory");
+      socket.off("deleteStory");
     };
   }, []);
 
@@ -78,17 +78,19 @@ const Second = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/posts', {
+        const res = await axios.get("http://localhost:3000/api/posts", {
           withCredentials: true,
         });
-        setPosts(res.data.map(post => ({
-          ...post,
-          likes: post.likes || [],
-          liked: post.liked || false,
-        })));
+        setPosts(
+          res.data.map((post) => ({
+            ...post,
+            likes: post.likes || [],
+            liked: post.liked || false,
+          }))
+        );
       } catch (error) {
-        console.log('Error fetching posts:', error);
-        setMessage('Failed to load posts.');
+        console.log("Error fetching posts:", error);
+        setMessage("Failed to load posts.");
       } finally {
         setLoading(false);
       }
@@ -101,11 +103,11 @@ const Second = () => {
     if (file) {
       // console.log('Story file selected:', file.name, file.type, file.size);
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('Story file is too large. Maximum size is 5MB.');
+        toast.error("Story file is too large. Maximum size is 5MB.");
         return;
       }
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select a valid image for the story.');
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image for the story.");
         return;
       }
       const reader = new FileReader();
@@ -114,7 +116,7 @@ const Second = () => {
         setStoryPreview(reader.result);
       };
       reader.onerror = () => {
-        toast.error('Error reading story file.');
+        toast.error("Error reading story file.");
       };
       reader.readAsDataURL(file);
     }
@@ -123,13 +125,13 @@ const Second = () => {
   const handleEditStoryImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Edit story file selected:', file.name, file.type, file.size);
+      console.log("Edit story file selected:", file.name, file.type, file.size);
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('Story file is too large. Maximum size is 5MB.');
+        toast.error("Story file is too large. Maximum size is 5MB.");
         return;
       }
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select a valid image for the story.');
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image for the story.");
         return;
       }
       const reader = new FileReader();
@@ -138,7 +140,7 @@ const Second = () => {
         setEditStoryPreview(reader.result);
       };
       reader.onerror = () => {
-        toast.error('Error reading story file.');
+        toast.error("Error reading story file.");
       };
       reader.readAsDataURL(file);
     }
@@ -147,29 +149,33 @@ const Second = () => {
   const handleStorySubmit = async (e) => {
     e.preventDefault();
     if (!storyImage) {
-      toast.error('Please select an image for the story.');
+      toast.error("Please select an image for the story.");
       return;
     }
     if (storyDescription.length > 200) {
-      toast.error('Description must be 200 characters or less.');
+      toast.error("Description must be 200 characters or less.");
       return;
     }
 
     try {
       setLoading(true);
       await axios.post(
-        'https://social-nest-backend.onrender.com/api/stories/create',
-        { media: storyImage, mediaType: 'image', description: storyDescription },
+        "http://localhost:3000/api/stories/create",
+        {
+          media: storyImage,
+          mediaType: "image",
+          description: storyDescription,
+        },
         { withCredentials: true }
       );
-      toast.success('Story created successfully!');
-      setStoryImage('');
-      setStoryPreview('');
-      setStoryDescription('');
-      socket.emit('newStory');
+      toast.success("Story created successfully!");
+      setStoryImage("");
+      setStoryPreview("");
+      setStoryDescription("");
+      socket.emit("newStory");
     } catch (error) {
-      console.error('Error creating story:', error);
-      toast.error(error.response?.data?.message || 'Failed to create story.');
+      console.error("Error creating story:", error);
+      toast.error(error.response?.data?.message || "Failed to create story.");
     } finally {
       setLoading(false);
     }
@@ -178,25 +184,33 @@ const Second = () => {
   const handleStoryUpdate = async (e) => {
     e.preventDefault();
     if (!editStoryImage) {
-      toast.error('Please select an image for the story.');
+      toast.error("Please select an image for the story.");
       return;
     }
     if (editStoryDescription.length > 200) {
-      toast.error('Description must be 200 characters or less.');
+      toast.error("Description must be 200 characters or less.");
       return;
     }
 
     try {
       setLoading(true);
       const res = await axios.put(
-        `https://social-nest-backend.onrender.com/api/stories/${editingStory}`,
-        { media: editStoryImage, mediaType: 'image', description: editStoryDescription },
+        `http://localhost:3000/api/stories/${editingStory}`,
+        {
+          media: editStoryImage,
+          mediaType: "image",
+          description: editStoryDescription,
+        },
         { withCredentials: true }
       );
       setStories((prevStories) =>
         prevStories.map((story) =>
           story._id === editingStory
-            ? { ...story, media: res.data.story.media, description: res.data.story.description }
+            ? {
+                ...story,
+                media: res.data.story.media,
+                description: res.data.story.description,
+              }
             : story
         )
       );
@@ -204,50 +218,59 @@ const Second = () => {
         setCurrentStory((prev) =>
           prev.map((story) =>
             story._id === editingStory
-              ? { ...story, media: res.data.story.media, description: res.data.story.description }
+              ? {
+                  ...story,
+                  media: res.data.story.media,
+                  description: res.data.story.description,
+                }
               : story
           )
         );
       }
-      toast.success('Story updated successfully!');
+      toast.success("Story updated successfully!");
       setEditingStory(null);
-      setEditStoryImage('');
-      setEditStoryPreview('');
-      setEditStoryDescription('');
+      setEditStoryImage("");
+      setEditStoryPreview("");
+      setEditStoryDescription("");
       setIsEditing(false);
-      socket.emit('updateStory');
+      socket.emit("updateStory");
     } catch (error) {
-      console.error('Error updating story:', error);
-      toast.error(error.response?.data?.message || 'Failed to update story.');
+      console.error("Error updating story:", error);
+      toast.error(error.response?.data?.message || "Failed to update story.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleStoryDelete = async (storyId) => {
-    if (!window.confirm('Are you sure you want to delete this story?')) return;
+    if (!window.confirm("Are you sure you want to delete this story?")) return;
 
     try {
       setLoading(true);
-      await axios.delete(`https://social-nest-backend.onrender.com/api/stories/${storyId}`, {
+      await axios.delete(`http://localhost:3000/api/stories/${storyId}`, {
         withCredentials: true,
       });
-      setStories((prevStories) => prevStories.filter((story) => story._id !== storyId));
+      setStories((prevStories) =>
+        prevStories.filter((story) => story._id !== storyId)
+      );
       if (currentStory && currentStory.some((story) => story._id === storyId)) {
         if (currentStory.length === 1) {
           setCurrentStory(null);
           setStoryIndex(0);
         } else {
-          const newIndex = storyIndex >= currentStory.length - 1 ? storyIndex - 1 : storyIndex;
-          setCurrentStory((prev) => prev.filter((story) => story._id !== storyId));
+          const newIndex =
+            storyIndex >= currentStory.length - 1 ? storyIndex - 1 : storyIndex;
+          setCurrentStory((prev) =>
+            prev.filter((story) => story._id !== storyId)
+          );
           setStoryIndex(newIndex);
         }
       }
-      toast.success('Story deleted successfully!');
-      socket.emit('deleteStory');
+      toast.success("Story deleted successfully!");
+      socket.emit("deleteStory");
     } catch (error) {
-      console.error('Error deleting story:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete story.');
+      console.error("Error deleting story:", error);
+      toast.error(error.response?.data?.message || "Failed to delete story.");
     } finally {
       setLoading(false);
     }
@@ -258,12 +281,12 @@ const Second = () => {
     setStoryIndex(index);
     try {
       await axios.post(
-        `https://social-nest-backend.onrender.com/api/stories/${userStories[index]._id}/view`,
+        `http://localhost:3000/api/stories/${userStories[index]._id}/view`,
         {},
         { withCredentials: true }
       );
     } catch (error) {
-      console.log('Error marking story as viewed:', error);
+      console.log("Error marking story as viewed:", error);
     }
   };
 
@@ -293,18 +316,20 @@ const Second = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-    
       if (file.size > 10 * 1024 * 1024) {
-        setMessage('File is too large. Maximum size is 10MB.');
+        setMessage("File is too large. Maximum size is 10MB.");
         return;
       }
-      const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-      if (file.type.startsWith('video/') && !validVideoTypes.includes(file.type)) {
-        setMessage('Unsupported video format. Please use MP4, WebM, or OGG.');
+      const validVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
+      if (
+        file.type.startsWith("video/") &&
+        !validVideoTypes.includes(file.type)
+      ) {
+        setMessage("Unsupported video format. Please use MP4, WebM, or OGG.");
         return;
       }
-      if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-        setMessage('Please select a valid image or video file.');
+      if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+        setMessage("Please select a valid image or video file.");
         return;
       }
       const reader = new FileReader();
@@ -312,21 +337,21 @@ const Second = () => {
         // console.log('Post file read successfully, type:', file.type);
         setPostImage(reader.result);
         setPostPreview(reader.result);
-        setMediaType(file.type.startsWith('video/') ? 'video' : 'image');
+        setMediaType(file.type.startsWith("video/") ? "video" : "image");
       };
       reader.onerror = () => {
-        setMessage('Error reading file. Please try another.');
+        setMessage("Error reading file. Please try another.");
       };
       reader.readAsDataURL(file);
     } else {
-      console.log('No post file selected');
+      console.log("No post file selected");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!desc || !postImage) {
-      setMessage('Please fill in all fields.');
+      setMessage("Please fill in all fields.");
       return;
     }
 
@@ -338,10 +363,10 @@ const Second = () => {
       //   image: postImage.slice(0, 50) + '...',
       // });
       const res = await axios.post(
-        'https://social-nest-backend.onrender.com/api/posts/CreatePost',
+        "http://localhost:3000/api/posts/CreatePost",
         { description: desc, image: postImage, mediaType },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
@@ -353,15 +378,19 @@ const Second = () => {
       };
       setPosts((prevPosts) => [newPost, ...prevPosts]);
 
-      toast.success('Post created successfully!');
-      setDesc('');
-      setPostImage('');
-      setPostPreview('');
-      setMediaType('image');
-      setMessage('');
+      toast.success("Post created successfully!");
+      setDesc("");
+      setPostImage("");
+      setPostPreview("");
+      setMediaType("image");
+      setMessage("");
     } catch (error) {
-      console.error('Error creating post:', error.response?.data, error.message);
-      setMessage(error.response?.data?.message || 'Failed to create post.');
+      console.error(
+        "Error creating post:",
+        error.response?.data,
+        error.message
+      );
+      setMessage(error.response?.data?.message || "Failed to create post.");
     } finally {
       setLoading(false);
     }
@@ -373,7 +402,7 @@ const Second = () => {
         <div className="flex flex-col items-center">
           <label htmlFor="storyImage" className="cursor-pointer">
             <img
-              src={profileImage || '/Profile.png'}
+              src={profileImage || "/Profile.png"}
               alt="Add Story"
               className="w-20 h-20 rounded-full border-3 border-blue-500"
             />
@@ -390,7 +419,7 @@ const Second = () => {
         {Object.values(groupedStories).map(({ user, stories }) => (
           <div key={user._id} className="flex flex-col items-center">
             <img
-              src={user.image || '/Profile.png'}
+              src={user.image || "/Profile.png"}
               alt={user.username}
               className="w-20 h-20 rounded-full border-3 border-red-500 cursor-pointer"
               onClick={() => handleStoryClick(stories, 0)}
@@ -410,8 +439,8 @@ const Second = () => {
               >
                 <div
                   className={`h-full bg-white transition-all duration-[5000ms] ease-linear ${
-                    index === storyIndex && !isEditing ? 'animate-progress' : ''
-                  } ${index < storyIndex ? 'w-full' : 'w-0'}`}
+                    index === storyIndex && !isEditing ? "animate-progress" : ""
+                  } ${index < storyIndex ? "w-full" : "w-0"}`}
                 ></div>
               </div>
             ))}
@@ -430,9 +459,9 @@ const Second = () => {
               <p className="text-white text-[16px]">
                 {new Date(
                   currentStory[storyIndex].createdAt
-                ).toLocaleDateString('en-GB', {
-                  hour: '2-digit',
-                  minute: '2-digit',
+                ).toLocaleDateString("en-GB", {
+                  hour: "2-digit",
+                  minute: "2-digit",
                   hour12: false,
                 })}
               </p>
@@ -461,44 +490,47 @@ const Second = () => {
           >
             ×
           </button>
-          {currentUserId && currentStory[storyIndex].userId._id === currentUserId && (
-            <div className="absolute top-4 right-12">
-              <button
-                onClick={() => setShowStoryMenu(!showStoryMenu)}
-                className="text-white text-2xl"
-              >
-                <BsThreeDotsVertical />
-              </button>
-              {showStoryMenu && (
-                <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-50">
-                  <button
-                    onClick={() => {
-                      setEditingStory(currentStory[storyIndex]._id);
-                      setEditStoryImage(currentStory[storyIndex].media);
-                      setEditStoryPreview(currentStory[storyIndex].media);
-                      setEditStoryDescription(currentStory[storyIndex].description || '');
-                      setShowStoryMenu(false);
-                      setIsEditing(true);
-                    }}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  >
-                    <BsPencilSquare />
-                    Edit Story
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleStoryDelete(currentStory[storyIndex]._id);
-                      setShowStoryMenu(false);
-                    }}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100"
-                  >
-                    <BsTrash />
-                    Delete Story
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+          {currentUserId &&
+            currentStory[storyIndex].userId._id === currentUserId && (
+              <div className="absolute top-4 right-12">
+                <button
+                  onClick={() => setShowStoryMenu(!showStoryMenu)}
+                  className="text-white text-2xl"
+                >
+                  <BsThreeDotsVertical />
+                </button>
+                {showStoryMenu && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-50">
+                    <button
+                      onClick={() => {
+                        setEditingStory(currentStory[storyIndex]._id);
+                        setEditStoryImage(currentStory[storyIndex].media);
+                        setEditStoryPreview(currentStory[storyIndex].media);
+                        setEditStoryDescription(
+                          currentStory[storyIndex].description || ""
+                        );
+                        setShowStoryMenu(false);
+                        setIsEditing(true);
+                      }}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >
+                      <BsPencilSquare />
+                      Edit Story
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleStoryDelete(currentStory[storyIndex]._id);
+                        setShowStoryMenu(false);
+                      }}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100"
+                    >
+                      <BsTrash />
+                      Delete Story
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           <button
             className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-3xl p-4"
             onClick={() => {
@@ -507,7 +539,7 @@ const Second = () => {
               }
             }}
           >
-            {'<'}
+            {"<"}
           </button>
           <button
             className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-3xl p-4"
@@ -520,7 +552,7 @@ const Second = () => {
               }
             }}
           >
-            {'>'}
+            {">"}
           </button>
 
           {editingStory && (
@@ -548,22 +580,24 @@ const Second = () => {
                   className="w-full p-3 rounded-xl bg-gray-100 focus:outline-none text-black resize-none"
                   rows={3}
                 />
-                <p className="text-sm text-gray-500">{editStoryDescription.length}/200</p>
+                <p className="text-sm text-gray-500">
+                  {editStoryDescription.length}/200
+                </p>
                 <div className="flex gap-2 mt-2">
                   <button
                     type="submit"
                     className="bg-blue-500 text-white p-2 rounded-lg"
                     disabled={loading}
                   >
-                    {loading ? 'Updating Story...' : 'Update Story'}
+                    {loading ? "Updating Story..." : "Update Story"}
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setEditingStory(null);
-                      setEditStoryImage('');
-                      setEditStoryPreview('');
-                      setEditStoryDescription('');
+                      setEditStoryImage("");
+                      setEditStoryPreview("");
+                      setEditStoryDescription("");
                       setIsEditing(false);
                     }}
                     className="bg-gray-500 text-white p-2 rounded-lg"
@@ -601,7 +635,7 @@ const Second = () => {
             className="bg-blue-500 text-white p-2 rounded-lg mt-2"
             disabled={loading}
           >
-            {loading ? 'Posting Story...' : 'Post Story'}
+            {loading ? "Posting Story..." : "Post Story"}
           </button>
         </form>
       )}
@@ -611,7 +645,7 @@ const Second = () => {
           <div className="flex flex-col gap-2">
             <div className="flex gap-2 items-center">
               <img
-                src={profileImage || '/Profile.png'}
+                src={profileImage || "/Profile.png"}
                 alt="profile"
                 className="w-8 h-8 rounded-full border-3"
               />
@@ -623,8 +657,8 @@ const Second = () => {
                 required
               />
             </div>
-            {postPreview && (
-              mediaType === 'image' ? (
+            {postPreview &&
+              (mediaType === "image" ? (
                 <img
                   src={postPreview}
                   alt="preview"
@@ -636,8 +670,7 @@ const Second = () => {
                   controls
                   className="h-[200px] w-full object-cover rounded-xl"
                 />
-              )
-            )}
+              ))}
           </div>
 
           <div className="Post-section flex gap-3 items-center justify-between mt-2">
@@ -659,7 +692,7 @@ const Second = () => {
               className="bg-blue-500 text-white p-2 rounded-lg"
               disabled={loading}
             >
-              {loading ? 'Posting...' : 'Post'}
+              {loading ? "Posting..." : "Post"}
             </button>
           </div>
         </div>
@@ -668,7 +701,7 @@ const Second = () => {
       {message && (
         <p
           className={`mt-2 ${
-            message.includes('successfully') ? 'text-green-500' : 'text-red-500'
+            message.includes("successfully") ? "text-green-500" : "text-red-500"
           }`}
         >
           {message}

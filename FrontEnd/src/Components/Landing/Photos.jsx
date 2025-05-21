@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BsArrowLeft } from 'react-icons/bs';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Photos = () => {
   const [photos, setPhotos] = useState([]); // Store user's photos
@@ -13,21 +13,22 @@ const Photos = () => {
     const fetchUserPhotos = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`https://social-nest-backend.onrender.com/api/user/profile`, {
+        const res = await axios.get(`http://localhost:3000/api/user/profile`, {
           withCredentials: true,
         });
 
         const userData = res.data;
         // Filter posts to include only images
-        const userPhotos = userData.posts?.filter((post) => post.mediaType === 'image') || [];
+        const userPhotos =
+          userData.posts?.filter((post) => post.mediaType === "image") || [];
         setPhotos(userPhotos);
       } catch (error) {
-        console.error('Error fetching user photos:', error);
+        console.error("Error fetching user photos:", error);
         if (error.response?.status === 401) {
-          setError('Unauthorized. Please log in.');
-          navigate('/login', { state: { reason: 'Session expired' } });
+          setError("Unauthorized. Please log in.");
+          navigate("/login", { state: { reason: "Session expired" } });
         } else {
-          setError('Failed to load photos. Please try again.');
+          setError("Failed to load photos. Please try again.");
         }
       } finally {
         setLoading(false);
@@ -67,7 +68,9 @@ const Photos = () => {
         >
           <BsArrowLeft size={24} />
         </button> */}
-        <h1 className="text-xl font-semibold text-gray-800 text-center">Your Photos</h1>
+        <h1 className="text-xl font-semibold text-gray-800 text-center">
+          Your Photos
+        </h1>
         <div className="w-6"></div> {/* Spacer for alignment */}
       </div>
 

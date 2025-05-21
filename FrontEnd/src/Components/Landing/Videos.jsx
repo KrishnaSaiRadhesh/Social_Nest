@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BsArrowLeft } from 'react-icons/bs';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Videos = () => {
   const [videos, setVideos] = useState([]); // Store user's videos
@@ -13,21 +13,22 @@ const Videos = () => {
     const fetchUserVideos = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`https://social-nest-backend.onrender.com/api/user/profile`, {
+        const res = await axios.get(`http://localhost:3000/api/user/profile`, {
           withCredentials: true,
         });
 
         const userData = res.data;
         // Filter posts to include only videos
-        const userVideos = userData.posts?.filter((post) => post.mediaType === 'video') || [];
+        const userVideos =
+          userData.posts?.filter((post) => post.mediaType === "video") || [];
         setVideos(userVideos);
       } catch (error) {
-        console.error('Error fetching user videos:', error);
+        console.error("Error fetching user videos:", error);
         if (error.response?.status === 401) {
-          setError('Unauthorized. Please log in.');
-          navigate('/login', { state: { reason: 'Session expired' } });
+          setError("Unauthorized. Please log in.");
+          navigate("/login", { state: { reason: "Session expired" } });
         } else {
-          setError('Failed to load videos. Please try again.');
+          setError("Failed to load videos. Please try again.");
         }
       } finally {
         setLoading(false);
@@ -57,7 +58,9 @@ const Videos = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="bg-white shadow-sm p-4 max-w-7xl mx-auto">
-        <h1 className="text-xl font-semibold text-gray-800 text-center">Your Videos</h1>
+        <h1 className="text-xl font-semibold text-gray-800 text-center">
+          Your Videos
+        </h1>
         <div className="w-6"></div> {/* Spacer for alignment */}
       </div>
 

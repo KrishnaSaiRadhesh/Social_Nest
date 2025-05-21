@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Posts from './Posts';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Posts from "./Posts";
+import { useNavigate } from "react-router-dom";
 
 const SavedPosts = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSavedPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('https://social-nest-backend.onrender.com/api/user/profile', {
+        const res = await axios.get("http://localhost:3000/api/user/profile", {
           withCredentials: true,
         });
         // console.log('Saved posts response:', res.data.savedPosts);
@@ -26,13 +26,13 @@ const SavedPosts = () => {
             post.user && // Ensure user object exists
             post.user.name // Ensure user.name exists
         );
-        // console.log('Valid posts:', validPosts);
+        console.log("Valid posts:", validPosts);
         setSavedPosts(res.data.savedPosts);
       } catch (error) {
-        console.error('Error fetching saved posts:', error);
-        setError('Please log in to view saved posts.');
+        console.error("Error fetching saved posts:", error);
+        setError("Please log in to view saved posts.");
         if (error.response?.status === 401) {
-          navigate('/login');
+          navigate("/login");
         }
       } finally {
         setLoading(false);
@@ -42,36 +42,33 @@ const SavedPosts = () => {
   }, [navigate]);
 
   const handleClearAll = async () => {
-    if (!window.confirm('Are you sure you want to clear all saved posts?')) return;
+    if (!window.confirm("Are you sure you want to clear all saved posts?"))
+      return;
     try {
       const validPosts = savedPosts.filter(
         (post) =>
-          post &&
-          post._id &&
-          post.createdAt &&
-          post.user &&
-          post.user.name
+          post && post._id && post.createdAt && post.user && post.user.name
       );
       if (validPosts.length === 0) {
         setSavedPosts([]);
-        alert('All saved posts cleared!');
+        alert("All saved posts cleared!");
         return;
       }
 
       await Promise.all(
         validPosts.map((post) =>
           axios.post(
-            `https://social-nest-backend.onrender.com/api/posts/${post._id}/unsave`,
+            `http://localhost:3000/api/posts/${post._id}/unsave`,
             {},
             { withCredentials: true }
           )
         )
       );
       setSavedPosts([]);
-      alert('All saved posts cleared!');
+      alert("All saved posts cleared!");
     } catch (error) {
-      console.error('Error clearing saved posts:', error);
-      alert('Failed to clear saved posts.');
+      console.error("Error clearing saved posts:", error);
+      alert("Failed to clear saved posts.");
     }
   };
 

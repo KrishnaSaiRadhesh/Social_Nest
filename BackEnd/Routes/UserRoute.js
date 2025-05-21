@@ -7,7 +7,7 @@ router.get("/Profile", protectRoute, PROFILE);
 router.put("/UpdateProfile", protectRoute, UPDATEPROFILE);
 router.post("/follow/:id", protectRoute, FOLLOW);
 router.post("/unfollow/:id", protectRoute, UNFOLLOW);
-router.get("/userById/:id", protectRoute, GET_USER_PROFILE); // New route for fetching user profile by ID
+router.get("/:id", protectRoute, GET_USER_PROFILE); 
 
 
 module.exports = router;

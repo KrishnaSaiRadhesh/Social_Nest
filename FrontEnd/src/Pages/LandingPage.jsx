@@ -4,9 +4,7 @@
 // import Second from '../Components/Landing/Second'
 // import Third from '../Components/Landing/Third'
 // import io from 'socket.io-client';
-
 // const socket = io('http://localhost:3000', { withCredentials: true });
-
 // const LandingPage = () => {
 //   return (
 //     <div className='h-screen flex flex-col'>
@@ -61,7 +59,7 @@ const LandingPage = ({ socket }) => {
       {/* Main layout: below header */}
       <div className="flex flex-1 pt-[64px]">
         {/* Left Sidebar */}
-        <div className="w-[350px] fixed top-[64px] bottom-0 mt-4 left-0">
+        <div className="w-[350px]  fixed top-[64px] bottom-0 mt-4 left-0">
           <First socket={socket} />
         </div>
 

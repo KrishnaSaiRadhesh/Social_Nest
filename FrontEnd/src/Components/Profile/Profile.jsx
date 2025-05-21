@@ -74,40 +74,40 @@ const Profile = () => {
           </button>
         </div>
 
-        <div className="flex justify-center items-start gap-10 p-3">
+        <div className="flex justify-center items-start lg:gap-10 gap-5 p-3">
           <div>
-            <img src={image} alt="" className="h-[200px] w-[200px] rounded-full border-2 border-black" />
-            <p className="font-semibold text-[18px] mt-3 text-center">{email}</p>
+            <img src={image} alt="" className="lg:h-[200px] h-[100px] w-[100px]  lg:w-[200px] rounded-full border-2 border-black" />
+            <p className="font-semibold lg:text-[18px] text-[10px] mt-3 text-center">{email}</p>
           </div>
 
           <div>
-            <h1 className="text-[25px]">{name}</h1>
+            <h1 className="lg:text-[25px]">{name}</h1>
 
             <div className="flex gap-5 mt-3 text-[22px]">
               <div>
-                <h2 className="font-bold text-2xl">{followers?.length}</h2>
-                <p>followers</p>
+                <h2 className="font-bold lg:text-2xl">{followers?.length}</h2>
+                <p className='lg:text-[20px] text-[10px]'>followers</p>
               </div>
 
               <div>
-                <h2 className="font-bold text-2xl">{following?.length}</h2>
-                <p>Following</p>
+                <h2 className="font-bold lg:text-2xl">{following?.length}</h2>
+                <p className='lg:text-[20px] text-[10px]'>Following</p>
               </div>
 
               <div>
-                <h2 className="font-bold text-2xl">{posts?.length}</h2>
-                <p>Post</p>
+                <h2 className="font-bold lg:text-2xl">{posts?.length}</h2>
+                <p className='lg:text-[20px] text-[10px]'>Posts</p>
               </div>
             </div>
 
             <div className="flex gap-5 pt-10">
               <button
-                className="bg-blue-500 text-white p-2 rounded-lg cursor-pointer"
+                className="bg-blue-500 text-white p-2 lg:text-[15px] text-[12px] rounded-lg cursor-pointer"
                 onClick={handleUpdateClick}
               >
                 Edit profile
               </button>
-              <button className="bg-blue-500 text-white p-2 rounded-lg cursor-pointer">
+              <button className="bg-blue-500 text-white lg:text-[15px] text-[12px] p-2 rounded-lg cursor-pointer">
                 Share Profile
               </button>
             </div>

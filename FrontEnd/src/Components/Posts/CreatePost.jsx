@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const CreatePost = ({ onPostCreated }) => {
-  const [desc, setDesc] = useState('');
-  const [image, setImage] = useState('');
-  const [message, setMessage] = useState('');
+  const [desc, setDesc] = useState("");
+  const [image, setImage] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -20,26 +20,26 @@ const CreatePost = ({ onPostCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!desc || !image) {
-      setMessage('Please fill in all fields.');
+      setMessage("Please fill in all fields.");
       return;
     }
 
     try {
       const res = await axios.post(
-        'http://localhost:3000/api/posts/CreatePost',
+        "http://localhost:3000/api/posts/CreatePost",
         { description: desc, image },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
-      setMessage('Post created successfully!');
-      setDesc('');
-      setImage('');
+      setMessage("Post created successfully!");
+      setDesc("");
+      setImage("");
       if (onPostCreated) onPostCreated(res.data.newPost);
     } catch (error) {
       console.error(error);
-      setMessage('Failed to create post.');
+      setMessage("Failed to create post.");
     }
   };
 

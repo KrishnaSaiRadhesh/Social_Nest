@@ -160,29 +160,18 @@ exports.UNFOLLOW = async (req, res) => {
 exports.GET_USER_PROFILE = async (req, res) => {
   try {
     const userId = req.params.id;
- 
-    
-    // Validate userId
     if (!userId || userId === 'undefined') {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
-
-    // Ensure userId is a valid ObjectId
     if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({ error: 'Invalid user ID format' });
     }
-
     const user = await userModel.findById(userId)
       .populate("posts")
       .select("-password");
-
-
-
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
     return res.status(200).json(user);
   } catch (error) {
     console.log("Error fetching user profile:", error);
@@ -190,15 +179,3 @@ exports.GET_USER_PROFILE = async (req, res) => {
   }
 };
 
-
-// exports.USERSTHATFOLLOW = async (req,res) => {
-//    try {
-//       const user_id = req.user._id;
-//       const users = await userModel.find({followers:user_id})
-//       console.log("friends",users)
-//       return res.status(200).json(users)
-//    } catch (error) {
-//       console.log(error)
-//       return res.status(400).json({message: "unable to fetch"})
-//    }
-// } 

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BsArrowLeft, BsCamera } from 'react-icons/bs';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BsArrowLeft, BsCamera } from "react-icons/bs";
 
 const UpdateProfile = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [name, setName] = useState(state?.name || '');
-  const [email, setEmail] = useState(state?.email || '');
-  const [image, setImage] = useState(state?.image || '');
+  const [name, setName] = useState(state?.name || "");
+  const [email, setEmail] = useState(state?.email || "");
+  const [image, setImage] = useState(state?.image || "");
   const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
@@ -28,10 +28,10 @@ const UpdateProfile = () => {
 
     try {
       const res = await axios.put(
-        'http://localhost:3000/api/user/UpdateProfile',
+        "http://localhost:3000/api/user/UpdateProfile",
         { name, email, image },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
@@ -42,9 +42,9 @@ const UpdateProfile = () => {
       setImage(data.image);
 
       // Navigate back to profile after successful update
-      navigate('/profile');
+      navigate("/profile");
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     } finally {
       setLoading(false);
     }
@@ -53,12 +53,20 @@ const UpdateProfile = () => {
   const handleBackClick = async () => {
     try {
       // console.log('Back button clicked, verifying authentication');
-      await axios.get('http://localhost:3000/api/user/profile', { withCredentials: true });
+      await axios.get("http://localhost:3000/api/user/profile", {
+        withCredentials: true,
+      });
       // console.log('Auth verified, navigating to profile page');
-      navigate('/profile', { state: { fromUpdateProfile: true } });
+      navigate("/profile", { state: { fromUpdateProfile: true } });
     } catch (error) {
-      console.error('Auth check failed:', error.response?.status, error.response?.data);
-      navigate('/login', { state: { reason: 'Please log in to access the profile page' } });
+      console.error(
+        "Auth check failed:",
+        error.response?.status,
+        error.response?.data
+      );
+      navigate("/login", {
+        state: { reason: "Please log in to access the profile page" },
+      });
     }
   };
 
@@ -77,7 +85,9 @@ const UpdateProfile = () => {
         </div>
 
         {/* Header */}
-        <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-6">Edit Profile</h2>
+        <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-6">
+          Edit Profile
+        </h2>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -85,7 +95,7 @@ const UpdateProfile = () => {
           <div className="flex flex-col items-center mb-6">
             <div className="relative">
               <img
-                src={image || '/Profile.png'}
+                src={image || "/Profile.png"}
                 alt="Profile"
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-2 border-gray-600"
               />
@@ -114,7 +124,7 @@ const UpdateProfile = () => {
               id="name"
               type="text"
               placeholder="Enter your name"
-              value={name || ''}
+              value={name || ""}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
             />
@@ -129,7 +139,7 @@ const UpdateProfile = () => {
               id="email"
               type="email"
               placeholder="Enter your email"
-              value={email || ''}
+              value={email || ""}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
             />
@@ -140,7 +150,7 @@ const UpdateProfile = () => {
             type="submit"
             disabled={loading}
             className={`w-full py-3 bg-blue-500 text-white rounded-lg font-semibold ${
-              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
             } transition duration-200 flex items-center justify-center gap-2`}
           >
             {loading ? (
@@ -168,7 +178,7 @@ const UpdateProfile = () => {
                 Updating...
               </>
             ) : (
-              'Update'
+              "Update"
             )}
           </button>
         </form>
