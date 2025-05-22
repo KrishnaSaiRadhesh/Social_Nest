@@ -21,7 +21,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    allowedOrigins,
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(fileUpload());
 
 const corsOptions = {
-  allowedOrigins,
+  origin: allowedOrigins,
   credentials: true,
 };
 app.use(cors(corsOptions));
