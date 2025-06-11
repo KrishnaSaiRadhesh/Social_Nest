@@ -534,7 +534,6 @@ import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { FaEdit, FaRegComment, FaTrash } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom"; // Add useNavigate
 
 const Posts = ({ posts, setPosts }) => {
   const [loading, setLoading] = useState(true);
@@ -550,9 +549,8 @@ const Posts = ({ posts, setPosts }) => {
   const [showComments, setShowComments] = useState({});
   const [savedPosts, setSavedPosts] = useState({});
   const [shareMessage, setShareMessage] = useState({});
-  const navigate = useNavigate(); // Initialize navigate
 
-useEffect(() => {
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
@@ -561,7 +559,12 @@ useEffect(() => {
         });
         console.log("User response:", res.data);
         setCurrentUserId(res.data._id);
-        const userSavedPosts = res.data.savedPosts || [];
+
+        // Fetch profile data for saved posts
+        const profileRes = await axios.get("http://localhost:3000/api/auth/Profile", {
+          withCredentials: true,
+        });
+        const userSavedPosts = profileRes.data.savedPosts || [];
         console.log("userSavedPosts:", userSavedPosts);
 
         const initialSavedPosts = {};
@@ -578,18 +581,13 @@ useEffect(() => {
         setSavedPosts(initialSavedPosts);
       } catch (error) {
         console.error("Error fetching user:", error);
-        if (error.response?.status === 401) {
-          setError("Session expired or unauthorized. Please log in again.");
-          navigate("/login", { replace: true }); // Redirect to login
-        } else {
-          setError("Failed to load user data. Please try again later.");
-        }
+        setError("Please log in to continue.");
       } finally {
         setLoading(false);
       }
     };
     fetchUser();
-  }, [navigate, posts]);
+  }, []);
 
   useEffect(() => {
     const initialLikes = {};
