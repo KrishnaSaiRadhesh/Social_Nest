@@ -10,26 +10,45 @@ router.post("/CreatePost", protectRoute, CREATEPOST);
 router.get("/", protectRoute, GETALLPOSTS);
 router.post("/:id/like", protectRoute, async (req, res) => {
   try {
-    const post = await PostModel.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
-
+    const postId = req.params.id;
     const userId = req.user._id;
 
-    if (!post.likes) {
-      post.likes = [];
+    // Find the post
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    if (post.likes.includes(userId)) {
-      post.likes.pull(userId);
+    // Check if user has already liked the post
+    const hasLiked = post.likes.some((id) => id.toString() === userId.toString());
+
+    if (hasLiked) {
+      // Unlike: Remove user from likes
+      post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
     } else {
+      // Like: Add user to likes
       post.likes.push(userId);
     }
 
     await post.save();
-    res.status(200).json({ likes: post.likes.length, liked: post.likes.includes(userId) });
-  } catch (err) {
-    console.error("Error in /:id/like:", err);
-    res.status(500).json({ message: err.message });
+
+    // Populate user and comments data for response
+    const updatedPost = await PostModel.findById(postId)
+      .populate("user", "name image")
+      .populate({
+        path: "comments.user",
+        select: "name image",
+      });
+
+    res.status(200).json({
+      message: hasLiked ? "Post unliked" : "Post liked",
+      success: true,
+      post: updatedPost,
+      liked: !hasLiked,
+    });
+  } catch (error) {
+    console.error("Error liking post:", error);
+    res.status(500).json({ message: "Failed to like post" });
   }
 });
 router.post("/:id/comment", protectRoute, commentOnPost);
@@ -39,36 +58,7 @@ router.delete("/:id", protectRoute, DELETEPOST);
 
 
 
-router.post("/:id/save", protectRoute, async (req, res) => {
-  try {
-    const post = await PostModel.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: "Post not found" });
 
-    const user = await userModel.findById(req.user._id);
-
-    // Avoid saving duplicate post IDs
-    if (!user.savedPosts.includes(post._id)) {
-      user.savedPosts.push(post._id);
-      await user.save();
-    }
-
-    // Populate saved posts with full data including user and comments' user
-    const updatedUser = await userModel
-      .findById(req.user._id)
-      .populate({
-        path: "savedPosts",
-        populate: [
-          { path: "user", select: "name image" }, // populate post author
-          { path: "comments.user", select: "name image" } // populate commenters
-        ]
-      });
-
-    res.status(200).json({ saved: true, savedPosts: updatedUser.savedPosts });
-  } catch (err) {
-    console.error("Error in /:id/save:", err);
-    res.status(500).json({ message: err.message });
-  }
-});
 
 
 

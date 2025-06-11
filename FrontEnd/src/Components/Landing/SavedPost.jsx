@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Posts from "./Posts";
+import Posts from "./Posts"; // Import the Posts component
 import { useNavigate } from "react-router-dom";
 
 const SavedPosts = () => {
@@ -13,24 +13,27 @@ const SavedPosts = () => {
     const fetchSavedPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/user/profile",
-          {
-            withCredentials: true,
-          }
-        );
-        // console.log('Saved posts response:', res.data.savedPosts);
-        // Filter out null or invalid entries, ensuring required fields are present
+        // Fetch all saved posts for the authenticated user
+        const res = await axios.get("http://localhost:3000/api/auth/saved-posts", {
+          withCredentials: true,
+        });
+        // Filter out null or invalid posts
         const validPosts = (res.data.savedPosts || []).filter(
           (post) =>
             post &&
             post._id &&
-            post.createdAt && // Ensure createdAt exists
-            post.user && // Ensure user object exists
-            post.user.name // Ensure user.name exists
+            post.createdAt &&
+            post.user &&
+            post.user.name &&
+            post.user.image
         );
-        console.log("Valid posts:", validPosts);
-        setSavedPosts(res.data.savedPosts);
+        console.log("Valid saved posts:", validPosts);
+        // Map posts to include the 'liked' field expected by Posts component
+        const formattedPosts = validPosts.map((post) => ({
+          ...post,
+          liked: post.liked || false, // Ensure 'liked' field is present
+        }));
+        setSavedPosts(formattedPosts);
       } catch (error) {
         console.error("Error fetching saved posts:", error);
         setError("Please log in to view saved posts.");
@@ -45,23 +48,18 @@ const SavedPosts = () => {
   }, [navigate]);
 
   const handleClearAll = async () => {
-    if (!window.confirm("Are you sure you want to clear all saved posts?"))
-      return;
+    if (!window.confirm("Are you sure you want to clear all saved posts?")) return;
     try {
-      const validPosts = savedPosts.filter(
-        (post) =>
-          post && post._id && post.createdAt && post.user && post.user.name
-      );
-      if (validPosts.length === 0) {
-        setSavedPosts([]);
-        alert("All saved posts cleared!");
+      if (savedPosts.length === 0) {
+        alert("No saved posts to clear!");
         return;
       }
 
+      // Unsave all posts
       await Promise.all(
-        validPosts.map((post) =>
+        savedPosts.map((post) =>
           axios.post(
-            `https://social-nest-backend.onrender.com/api/posts/${post._id}/unsave`,
+            `http://localhost:3000/api/${post._id}/unsave`,
             {},
             { withCredentials: true }
           )
@@ -71,7 +69,7 @@ const SavedPosts = () => {
       alert("All saved posts cleared!");
     } catch (error) {
       console.error("Error clearing saved posts:", error);
-      alert("Failed to clear saved posts.");
+      alert(error.response?.data?.message || "Failed to clear saved posts.");
     }
   };
 
@@ -98,11 +96,7 @@ const SavedPosts = () => {
           </button>
         )}
       </div>
-      {savedPosts.length > 0 ? (
-        <Posts posts={savedPosts} setPosts={setSavedPosts} />
-      ) : (
-        <p className="text-center text-gray-500">You have no saved posts.</p>
-      )}
+      <Posts posts={savedPosts} setPosts={setSavedPosts} />
     </div>
   );
 };

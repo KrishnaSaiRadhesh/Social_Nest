@@ -100,36 +100,41 @@ exports.GETALLPOSTS = async (req, res) => {
 
 exports.commentOnPost = async (req, res) => {
   try {
+    const postId = req.params.id;
     const { commentText } = req.body;
-    const { id: postId } = req.params;
     const userId = req.user._id;
 
     if (!commentText) {
-      return res.status(400).json({ error: "Text field is required" });
+      return res.status(400).json({ message: "Comment text is required" });
     }
 
     const post = await PostModel.findById(postId);
     if (!post) {
-      return res.status(404).json({ error: "Post not found" });
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    const comment = { user: userId, commentText };
+    const comment = {
+      commentText,
+      user: userId,
+      createdAt: new Date(),
+    };
+
     post.comments.push(comment);
     await post.save();
 
-    const populatedPost = await PostModel.findById(postId)
-      .populate("comments.user", "name image")
-      .sort({ createdAt: -1 });
+    const updatedPost = await PostModel.findById(postId)
+      .populate("user", "name image")
+      .populate({
+        path: "comments.user",
+        select: "name image",
+      });
 
-    const newComment = populatedPost.comments[populatedPost.comments.length - 1];
-    res.status(200).json({
-      message: "Commented on a post",
-      comment: newComment,
-      success: true,
-    });
+    const newComment = updatedPost.comments[updatedPost.comments.length - 1];
+
+    res.status(200).json({ message: "Commented successfully", comment: newComment });
   } catch (error) {
-    console.error("Error in commentOnPost controller:", error.stack);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error adding comment:", error);
+    res.status(500).json({ message: "Failed to comment" });
   }
 };
 

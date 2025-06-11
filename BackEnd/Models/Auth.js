@@ -1,40 +1,48 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required:true
-    },
-    email:{
-        type:String,
-        required:true,
-        unique:true
-    },
-    password:{
-        type:String
-    },
-    image:{
-        type:String,
-        default:"/Profile.png"
-
-    },
-   followers: {
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  image: {
+    type: String,
+    default: '/Profile.png'
+  },
+  googleImage: {
+    type: String // New field for Google profile image
+  },
+  followers: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    default: [], // Ensure default is an empty array
+    default: []
   },
   following: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    default: [], // Ensure default is an empty array
+    default: []
   },
-    posts:{
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
-        default: [],
-    },
-    savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post", default: [] }], // New field for saved posts
-}, 
-{
-    timestamps: true
-}
-)
+  posts: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+    default: []
+  },
+  savedPosts: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+    default: []
+  }
+}, {
+  timestamps: true
+});
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model('User', userSchema);

@@ -16,35 +16,34 @@ const Profile = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `https://social-nest-backend.onrender.com/api/user/profile`,
-          {
-            withCredentials: true,
-          }
-        );
-        const data = res.data;
-        setName(data.name);
-        setEmail(data.email);
-        setImage(data.image);
-        setFollowers(data.followers);
-        setFollowing(data.following);
-        setPosts(data.posts);
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+        withCredentials: true,
+      });
+      const data = res.data;
+      setName(data.name);
+      setEmail(data.email);
+      setImage(data.image || "/Profile.png");
+      setFollowers(data.followers || []);
+      setFollowing(data.following || []);
+      setPosts(data.posts || []);
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+      if (error.response?.status === 401) {
+        setError("Session expired. Please log in again.");
+        navigate("/login", { replace: true });
+      } else {
         setError("Failed to load profile. Please try again.");
-        if (error.response?.status === 401) {
-          navigate("/login");
-        }
-      } finally {
-        setLoading(false);
       }
-    };
-    fetchProfile();
-  }, [navigate]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchProfile();
+}, [navigate]);
 
   const handleUpdateClick = () => {
     navigate("/UpdateProfile", {

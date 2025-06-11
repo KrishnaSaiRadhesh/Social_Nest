@@ -26,7 +26,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "https://social-nest-backend.onrender.com/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         formData,
         {
           headers: {
@@ -51,6 +51,11 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    setLoading(true);
+    window.location.href = 'http://localhost:3000/auth/google';
   };
 
   return (
@@ -133,22 +138,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Remember Me */}
-          {/* <div className="flex items-center mb-4 sm:mb-5 md:mb-6">
-            <input
-              type="checkbox"
-              id="remember"
-              className="mr-2 accent-blue-600 h-3.5 w-3.5 sm:h-4 sm:w-4"
-              disabled={loading}
-            />
-            <label
-              htmlFor="remember"
-              className="text-xs sm:text-sm md:text-sm text-gray-700"
-            >
-              Remember me
-            </label>
-          </div> */}
-
           {/* Sign In Button */}
           <button
             type="submit"
@@ -167,6 +156,7 @@ const Login = () => {
         {/* Social Buttons */}
         <div className="space-y-2 sm:space-y-3">
           <button
+            onClick={handleGoogleLogin}
             className="w-full border border-gray-200 py-2 sm:py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs sm:text-sm font-medium hover:bg-gray-50 transition-colors"
             disabled={loading}
           >
