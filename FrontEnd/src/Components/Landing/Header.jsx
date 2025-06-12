@@ -12,7 +12,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("https://social-nest-backend.onrender.com/api/user", {
+//         const res = await axios.get("http://localhost:3000/api/user", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -38,7 +38,7 @@
 //     try {
 //       // Clear both JWT and session-based authentication
 //       const res = await axios.post(
-//         "https://social-nest-backend.onrender.com/api/auth/logout",
+//         "http://localhost:3000/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -48,7 +48,7 @@
 //         localStorage.clear();
 //         sessionStorage.clear();
 //         // Also clear Google session
-//         await axios.get("https://social-nest-backend.onrender.com/auth/logout", {
+//         await axios.get("http://localhost:3000/auth/logout", {
 //           withCredentials: true,
 //         });
 //         navigate("/login", { replace: true });
@@ -120,7 +120,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("https://social-nest-backend.onrender.com/api/auth/Profile", {
+//         const res = await axios.get("http://localhost:3000/api/auth/Profile", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -144,7 +144,7 @@
 //   const handleLogout = async () => {
 //     try {
 //       const res = await axios.post(
-//         "https://social-nest-backend.onrender.com/api/auth/logout",
+//         "http://localhost:3000/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -214,6 +214,7 @@ import { IoNotifications } from "react-icons/io5";
 import { FaBookmark } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
 
 const Header = () => {
   const [image, setImage] = useState("");
@@ -223,12 +224,9 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+          withCredentials: true,
+        });
         const data = res.data;
         console.log("User data:", data);
         setImage(data.image || "/Profile.png");
@@ -250,7 +248,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "https://social-nest-backend.onrender.com/api/auth/logout",
+        "http://localhost:3000/api/auth/logout",
         {},
         { withCredentials: true }
       );
@@ -263,13 +261,13 @@ const Header = () => {
       }
     } catch (error) {
       console.error("Logout failed:", error);
-      alert("Failed to log out. Please try again.");
+      to("Failed to log out. Please try again.");
     }
   };
 
   return (
-    <div className="bg-gray-100 p-3 sm:p-4 md:p-5 shadow-lg flex items-center justify-around relative">
-      <div className="Logo flex items-center gap-2 sm:gap-3">
+    <div className="bg-gray-100 p-3 sm:p-3 md:p-4 md:pl-20 md:pr-40 shadow-lg flex items-center justify-between relative">
+      <div className="Logo flex items-center  sm:gap-3">
         <img
           className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
           src="/Logo.png"
@@ -280,12 +278,12 @@ const Header = () => {
         </h2>
       </div>
 
-      <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[5em]">
-        {/* <IoNotifications className="w-5 h-5 sm:w-6 sm:h-6" /> */}
+      {/* <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[5em]">
+        <IoNotifications className="w-5 h-5 sm:w-6 sm:h-6" />
         <Link to="/saved" title="Saved Posts">
           <FaBookmark className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer hover:text-blue-500 transition" />
         </Link>
-      </div>
+      </div> */}
 
       <div className="relative">
         <div className="cursor-pointer" onClick={toggleModel}>
@@ -312,6 +310,7 @@ const Header = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

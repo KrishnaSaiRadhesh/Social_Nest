@@ -13,6 +13,11 @@ const mongoose = require("mongoose");
 const User = require("./Models/Auth");
 
 dotenv.config();
+const app = express();
+
+app.use(fileUpload()); // ⬅️ This enables req.files
+app.use(express.json()); // For JSON
+app.use(express.urlencoded({ extended: true }));
 
 // Passport configuration
 passport.serializeUser((user, done) => {
@@ -30,8 +35,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://social-nest-backend.onrender.com/auth/google/callback",
+      callbackURL: "http://localhost:3000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -60,10 +64,9 @@ passport.use(
 const allowedOrigins = [
   "http://localhost:5173",
   "https://funny-pony-68b842.netlify.app",
-  "https://social-nest-six.vercel.app"
+  "https://social-nest-six.vercel.app",
 ];
 
-const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {

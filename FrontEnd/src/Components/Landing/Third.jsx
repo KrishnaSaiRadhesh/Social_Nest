@@ -19,7 +19,7 @@ const Third = () => {
       try {
         // Fetch current user's profile to get their ID and following list
         const profileRes = await axios.get(
-          "https://social-nest-backend.onrender.com/api/user/profile",
+          "http://localhost:3000/api/user/profile",
           {
             withCredentials: true,
           }
@@ -30,7 +30,7 @@ const Third = () => {
 
         // Fetch suggested users
         const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/suggested",
+          "http://localhost:3000/api/auth/suggested",
           {
             withCredentials: true,
           }
@@ -74,7 +74,7 @@ const Third = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `https://social-nest-backend.onrender.com/api/user/follow/${userId}`,
+        `http://localhost:3000/api/user/follow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -87,7 +87,7 @@ const Third = () => {
   const handleUnFollow = async (userId) => {
     try {
       await axios.post(
-        `https://social-nest-backend.onrender.com/api/user/unfollow/${userId}`,
+        `http://localhost:3000/api/user/unfollow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -106,7 +106,7 @@ const Third = () => {
   };
 
   return (
-    <div className="p-4 h-screen bg-white shadow-lg hidden lg:block ">
+    <div className="mx-4 px-4 py-2 h-screen bg-white shadow-lg hidden lg:block rounded-lg ">
       <div className="p-3 flex items-center gap-3 justify-between w-full mt-1">
         <h2 className="text-lg font-medium">Suggested for you</h2>
       </div>

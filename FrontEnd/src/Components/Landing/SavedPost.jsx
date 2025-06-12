@@ -15,7 +15,7 @@ const SavedPosts = () => {
         setLoading(true);
         // Fetch all saved posts for the authenticated user
         const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/saved-posts",
+          "http://localhost:3000/api/auth/saved-posts",
           {
             withCredentials: true,
           }
@@ -63,7 +63,7 @@ const SavedPosts = () => {
       await Promise.all(
         savedPosts.map((post) =>
           axios.post(
-            `https://social-nest-backend.onrender.com/api/${post._id}/unsave`,
+            `http://localhost:3000/api/${post._id}/unsave`,
             {},
             { withCredentials: true }
           )

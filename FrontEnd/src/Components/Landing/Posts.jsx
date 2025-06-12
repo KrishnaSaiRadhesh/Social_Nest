@@ -25,7 +25,7 @@
 //     const fetchUser = async () => {
 //       try {
 //         setLoading(true);
-//         const res = await axios.get("https://social-nest-backend.onrender.com/api/user/profile", {
+//         const res = await axios.get("http://localhost:3000/api/user/profile", {
 //           withCredentials: true,
 //         });
 //         console.log("Profile response:", res.data);
@@ -69,7 +69,7 @@
 //   const commentSubmit = async (postId) => {
 //     try {
 //       const res = await axios.post(
-//         `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
+//         `http://localhost:3000/api/posts/${postId}/comment`,
 //         { commentText: commentText[postId] || "" },
 //         { withCredentials: true }
 //       );
@@ -94,7 +94,7 @@
 //   const handleLike = async (id) => {
 //     try {
 //       const res = await axios.post(
-//         `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
+//         `http://localhost:3000/api/posts/${id}/like`,
 //         {},
 //         { withCredentials: true }
 //       );
@@ -117,7 +117,7 @@
 //       const isSaved = savedPosts[postId];
 //       const endpoint = isSaved ? "unsave" : "save";
 //       const res = await axios.post(
-//         `https://social-nest-backend.onrender.com/api/auth/${postId}/${endpoint}`,
+//         `http://localhost:3000/api/auth/${postId}/${endpoint}`,
 //         {},
 //         { withCredentials: true }
 //       );
@@ -139,7 +139,7 @@
 //   };
 
 //   const handleShare = async (post) => {
-//     const shareUrl = `https://social-nest-backend.onrender.com/posts/${post._id}`; // Adjust this URL based on your app's routing
+//     const shareUrl = `http://localhost:3000/posts/${post._id}`; // Adjust this URL based on your app's routing
 //     const shareData = {
 //       title: `Post by ${post.user?.name || "User"}`,
 //       text: post.description || "Check out this post!",
@@ -226,7 +226,7 @@
 //     }
 //     try {
 //       const res = await axios.put(
-//         `https://social-nest-backend.onrender.com/api/posts/${postId}`,
+//         `http://localhost:3000/api/posts/${postId}`,
 //         { description: editDesc, image: editMedia, mediaType: editMediaType },
 //         { withCredentials: true }
 //       );
@@ -252,7 +252,7 @@
 //   const handleDelete = async (postId) => {
 //     if (!window.confirm("Are you sure you want to delete this post?")) return;
 //     try {
-//       await axios.delete(`https://social-nest-backend.onrender.com/api/posts/${postId}`, {
+//       await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
 //         withCredentials: true,
 //       });
 //       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
@@ -533,6 +533,7 @@ import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { FaEdit, FaRegComment, FaTrash } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
+import { toast, ToastContainer } from "react-toastify";
 
 const Posts = ({ posts, setPosts }) => {
   const [loading, setLoading] = useState(true);
@@ -553,18 +554,15 @@ const Posts = ({ posts, setPosts }) => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+          withCredentials: true,
+        });
         console.log("User response:", res.data);
         setCurrentUserId(res.data._id);
 
         // Fetch profile data for saved posts
         const profileRes = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          "http://localhost:3000/api/auth/Profile",
           {
             withCredentials: true,
           }
@@ -608,7 +606,7 @@ const Posts = ({ posts, setPosts }) => {
   const commentSubmit = async (postId) => {
     try {
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
+        `http://localhost:3000/api/posts/${postId}/comment`,
         { commentText: commentText[postId] || "" },
         { withCredentials: true }
       );
@@ -623,17 +621,17 @@ const Posts = ({ posts, setPosts }) => {
         )
       );
       setCommentText((prev) => ({ ...prev, [postId]: "" }));
-      alert("Commented successfully");
+      toast.success("Commented successfully");
     } catch (error) {
       console.error("Error commenting:", error);
-      alert(error.response?.data?.message || "Failed to comment.");
+      toast.error(error.response?.data?.message || "Failed to comment.");
     }
   };
 
   const handleLike = async (id) => {
     try {
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
+        `http://localhost:3000/api/posts/${id}/like`,
         {},
         { withCredentials: true }
       );
@@ -659,7 +657,7 @@ const Posts = ({ posts, setPosts }) => {
       }));
     } catch (err) {
       console.error("Like failed:", err);
-      alert(err.response?.data?.message || "Failed to like post.");
+      toast.error(err.response?.data?.message || "Failed to like post.");
     }
   };
 
@@ -668,7 +666,7 @@ const Posts = ({ posts, setPosts }) => {
       const isSaved = savedPosts[postId];
       const endpoint = isSaved ? "unsave" : "save";
       const res = await axios.post(
-        `https://social-nest-backend.onrender.com/api/auth/${postId}/${endpoint}`,
+        `http://localhost:3000/api/auth/${postId}/${endpoint}`,
         {},
         { withCredentials: true }
       );
@@ -676,13 +674,13 @@ const Posts = ({ posts, setPosts }) => {
         ...prevSaved,
         [postId]: res.data.saved,
       }));
-      alert(res.data.saved ? "Post saved!" : "Post unsaved!");
+      toast.success(res.data.saved ? "Post saved!" : "Post unsaved!");
     } catch (error) {
       console.error(
         `Error ${savedPosts[postId] ? "unsaving" : "saving"} post:`,
         error
       );
-      alert(
+      toast.error(
         error.response?.data?.message ||
           `Failed to ${savedPosts[postId] ? "unsave" : "save"} post.`
       );
@@ -690,7 +688,7 @@ const Posts = ({ posts, setPosts }) => {
   };
 
   const handleShare = async (post) => {
-    const shareUrl = `https://social-nest-backend.onrender.com/posts/${post._id}`;
+    const shareUrl = `http://localhost:3000/posts/${post._id}`;
     const shareData = {
       title: `Post by ${post.user?.name || "User"}`,
       text: post.description || "Check out this post!",
@@ -779,7 +777,7 @@ const Posts = ({ posts, setPosts }) => {
     }
     try {
       const res = await axios.put(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
+        `http://localhost:3000/api/posts/${postId}`,
         { description: editDesc, image: editMedia, mediaType: editMediaType },
         { withCredentials: true }
       );
@@ -795,7 +793,7 @@ const Posts = ({ posts, setPosts }) => {
       setEditMedia("");
       setEditMediaType("image");
       setEditMessage("");
-      alert("Post updated successfully");
+      toast.success("Post updated successfully");
     } catch (error) {
       console.error("Error updating post:", error);
       setEditMessage(error.response?.data?.message || "Failed to update post.");
@@ -805,17 +803,14 @@ const Posts = ({ posts, setPosts }) => {
   const handleDelete = async (postId) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      await axios.delete(
-        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
+        withCredentials: true,
+      });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-      alert("Post deleted successfully");
+      toast.success("Post deleted successfully");
     } catch (error) {
       console.error("Error deleting post:", error);
-      alert(error.response?.data?.message || "Failed to delete post.");
+      toast.error(error.response?.data?.message || "Failed to delete post.");
     }
   };
 
@@ -1076,6 +1071,7 @@ const Posts = ({ posts, setPosts }) => {
       ) : (
         <p className="text-center text-gray-500">No posts found</p>
       )}
+      <ToastContainer />
     </div>
   );
 };

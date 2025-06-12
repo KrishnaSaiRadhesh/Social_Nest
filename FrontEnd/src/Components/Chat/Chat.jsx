@@ -22,12 +22,9 @@ const ChatApp = ({ socket }) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/user/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/user/Profile", {
+          withCredentials: true,
+        });
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user ID:", error);
@@ -36,12 +33,9 @@ const ChatApp = ({ socket }) => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get(
-          "https://social-nest-backend.onrender.com/api/auth/friends",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/friends", {
+          withCredentials: true,
+        });
         setFriends(res.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -52,7 +46,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-backend.onrender.com/api/user/${friendId}`,
+            `http://localhost:3000/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -77,7 +71,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-backend.onrender.com/api/messages/${friendId}`,
+            `http://localhost:3000/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -151,16 +145,23 @@ const ChatApp = ({ socket }) => {
       formData.append("receiverId", friendId);
       if (newMessage) formData.append("content", newMessage);
       if (imageFile) formData.append("image", imageFile);
+      console.log(formData);
+
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
 
       const res = await axios.post(
-        "https://social-nest-backend.onrender.com/api/messages",
+        "http://localhost:3000/api/messages",
         formData,
         {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      console.log(res);
       const sentMessage = res.data;
+      console.log(sentMessage);
       setMessages((prev) => {
         if (prev.some((msg) => msg._id === sentMessage._id)) return prev;
         return [...prev, sentMessage];

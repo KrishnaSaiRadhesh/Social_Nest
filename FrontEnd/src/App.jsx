@@ -14,7 +14,7 @@
 // import Friends from './Components/Landing/Friends';
 
 // // Use port 5000 to match your original backend
-// const socket = io('https://social-nest-backend.onrender.com', { withCredentials: true });
+// const socket = io('http://localhost:3000', { withCredentials: true });
 
 // const App = () => {
 //   return (
@@ -51,7 +51,7 @@
 // import io from "socket.io-client";
 // import SavedPost from "./Components/Landing/SavedPost";
 
-// const socket = io("https://social-nest-backend.onrender.com", {
+// const socket = io("http://localhost:3000", {
 //   withCredentials: true,
 // });
 
@@ -90,14 +90,13 @@ import Chat from "./Components/Chat/Chat";
 import SavedPost from "./Components/Landing/SavedPost";
 import io from "socket.io-client";
 
-const socket = io("https://social-nest-backend.onrender.com", {
+const socket = io("http://localhost:3000", {
   withCredentials: true,
 });
 
 const GoogleLogin = () => {
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://social-nest-backend.onrender.com/auth/google";
+    window.location.href = "http://localhost:3000/auth/google";
   };
 
   return (
@@ -119,12 +118,9 @@ const Dashboard = () => {
   React.useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          "https://social-nest-backend.onrender.com/api/user",
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch("http://localhost:3000/api/user", {
+          credentials: "include",
+        });
         if (response.ok) {
           const data = await response.json();
           setUser(data);
@@ -143,7 +139,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("https://social-nest-backend.onrender.com/auth/logout", {
+      await fetch("http://localhost:3000/auth/logout", {
         credentials: "include",
       });
       window.location.href = "/";

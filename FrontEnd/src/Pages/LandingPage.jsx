@@ -4,7 +4,7 @@
 // import Second from '../Components/Landing/Second'
 // import Third from '../Components/Landing/Third'
 // import io from 'socket.io-client';
-// const socket = io('https://social-nest-backend.onrender.com', { withCredentials: true });
+// const socket = io('http://localhost:3000', { withCredentials: true });
 // const LandingPage = () => {
 //   return (
 //     <div className='h-screen flex flex-col'>
@@ -58,12 +58,12 @@ const LandingPage = ({ socket }) => {
       {/* Main layout: below header */}
       <div className="flex flex-1 pt-[64px]">
         {/* Left Sidebar */}
-        <div className="w-[350px]  fixed top-[64px] bottom-0 mt-4 left-0">
+        <div className="  fixed top-[64px] bottom-0 mt-6 left-0">
           <First socket={socket} />
         </div>
 
         {/* Middle Scrollable Content */}
-        <div className="flex-1 max-w-7xl mx-auto overflow-y-auto pt-4 px-4 mt-4">
+        <div className="flex-1 lg:max-w-3xl max-w-4xl mx-auto overflow-y-auto pt-4 px-4 mt-3">
           <Routes>
             <Route path="/" element={<Second />} />
             <Route path="feed" element={<Second />} />
@@ -75,7 +75,7 @@ const LandingPage = ({ socket }) => {
         </div>
 
         {/* Right Sidebar */}
-        <div className="w-[350px] fixed top-[64px] bottom-0 mt-8 right-0">
+        <div className="fixed top-[64px] bottom-0 mt-8 right-0">
           <Third />
         </div>
       </div>
