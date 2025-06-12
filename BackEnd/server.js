@@ -64,7 +64,7 @@ passport.use(
 const allowedOrigins = [
   "http://localhost:5173",
   "https://funny-pony-68b842.netlify.app",
-  "https://social-nest-six.vercel.app",
+  "https://social-nest-ivory.vercel.app",
 ];
 
 const server = http.createServer(app);
@@ -113,7 +113,7 @@ app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("https://social-nest-six.vercel.app/home");
+    res.redirect("https://social-nest-ivory.vercel.app/home");
   }
 );
 
@@ -139,7 +139,7 @@ app.get("/api/user", async (req, res) => {
 
 app.get("/auth/logout", (req, res) => {
   req.logout(() => {
-    res.redirect("https://social-nest-six.vercel.app/login");
+    res.redirect("https://social-nest-ivory.vercel.app/login");
   });
 });
 
