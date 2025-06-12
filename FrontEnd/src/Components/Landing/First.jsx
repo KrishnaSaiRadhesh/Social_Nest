@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { RiHome6Line } from 'react-icons/ri';
-import { FaUserFriends } from 'react-icons/fa';
-import { MdOutlineEventNote } from 'react-icons/md';
-import { IoVideocam } from 'react-icons/io5';
-import { IoChatboxEllipsesOutline } from 'react-icons/io5';
-import { BiMessageSquareDetail, BiMoviePlay, BiSolidVideos } from 'react-icons/bi';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IoMdPhotos } from 'react-icons/io';
+import React, { useEffect, useState } from "react";
+import { RiHome6Line } from "react-icons/ri";
+import { FaUserFriends } from "react-icons/fa";
+import { MdOutlineEventNote } from "react-icons/md";
+import { IoVideocam } from "react-icons/io5";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import {
+  BiMessageSquareDetail,
+  BiMoviePlay,
+  BiSolidVideos,
+} from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { IoMdPhotos } from "react-icons/io";
 
 const First = ({ socket }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [image, setImage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -23,23 +27,29 @@ const First = ({ socket }) => {
     const fetchProfile = async () => {
       try {
         // Check if user is authenticated (Google or JWT)
-        const authRes = await axios.get('http://localhost:3000/api/auth/Profile', {
-          withCredentials: true,
-        });
+        const authRes = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         if (!authRes.data || authRes.status !== 200) {
-          navigate('/login');
+          navigate("/login");
           return;
         }
 
         const user = authRes.data;
         setName(user.name);
         setEmail(user.email);
-        setImage(user.image || './Profile.png');
+        setImage(user.image || "./Profile.png");
 
         // Fetch profile data from your custom endpoint
-        const res = await axios.get('http://localhost:3000/api/auth/Profile', {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
         setFollowers(data.followers);
         setFollowing(data.following);
@@ -47,7 +57,7 @@ const First = ({ socket }) => {
       } catch (error) {
         console.log(error);
         if (error.response?.status === 401) {
-          navigate('/login');
+          navigate("/login");
         }
       } finally {
         setLoading(false);
@@ -68,7 +78,7 @@ const First = ({ socket }) => {
           <div className="Profile p-5 bg-gray-50 rounded-2xl">
             <div className="pro-sec flex gap-2 items-center">
               <img
-                src={image || './Profile.png'}
+                src={image || "./Profile.png"}
                 alt="Profile_image"
                 className="w-10 h-10 rounded-full"
               />

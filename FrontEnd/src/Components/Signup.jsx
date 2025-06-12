@@ -28,7 +28,7 @@ const Signup = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/signup",
+        "https://social-nest-backend.onrender.com/api/auth/signup",
         formData,
         {
           headers: {
@@ -58,7 +58,8 @@ const Signup = () => {
 
   const handleGoogleSignup = () => {
     setLoading(true);
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href =
+      "https://social-nest-backend.onrender.com/auth/google";
   };
 
   return (

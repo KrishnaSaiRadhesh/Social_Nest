@@ -25,7 +25,7 @@
 //     const fetchUser = async () => {
 //       try {
 //         setLoading(true);
-//         const res = await axios.get("http://localhost:3000/api/user/profile", {
+//         const res = await axios.get("https://social-nest-backend.onrender.com/api/user/profile", {
 //           withCredentials: true,
 //         });
 //         console.log("Profile response:", res.data);
@@ -69,7 +69,7 @@
 //   const commentSubmit = async (postId) => {
 //     try {
 //       const res = await axios.post(
-//         `http://localhost:3000/api/posts/${postId}/comment`,
+//         `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
 //         { commentText: commentText[postId] || "" },
 //         { withCredentials: true }
 //       );
@@ -94,7 +94,7 @@
 //   const handleLike = async (id) => {
 //     try {
 //       const res = await axios.post(
-//         `http://localhost:3000/api/posts/${id}/like`,
+//         `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
 //         {},
 //         { withCredentials: true }
 //       );
@@ -117,7 +117,7 @@
 //       const isSaved = savedPosts[postId];
 //       const endpoint = isSaved ? "unsave" : "save";
 //       const res = await axios.post(
-//         `http://localhost:3000/api/auth/${postId}/${endpoint}`,
+//         `https://social-nest-backend.onrender.com/api/auth/${postId}/${endpoint}`,
 //         {},
 //         { withCredentials: true }
 //       );
@@ -139,7 +139,7 @@
 //   };
 
 //   const handleShare = async (post) => {
-//     const shareUrl = `http://localhost:3000/posts/${post._id}`; // Adjust this URL based on your app's routing
+//     const shareUrl = `https://social-nest-backend.onrender.com/posts/${post._id}`; // Adjust this URL based on your app's routing
 //     const shareData = {
 //       title: `Post by ${post.user?.name || "User"}`,
 //       text: post.description || "Check out this post!",
@@ -226,7 +226,7 @@
 //     }
 //     try {
 //       const res = await axios.put(
-//         `http://localhost:3000/api/posts/${postId}`,
+//         `https://social-nest-backend.onrender.com/api/posts/${postId}`,
 //         { description: editDesc, image: editMedia, mediaType: editMediaType },
 //         { withCredentials: true }
 //       );
@@ -252,7 +252,7 @@
 //   const handleDelete = async (postId) => {
 //     if (!window.confirm("Are you sure you want to delete this post?")) return;
 //     try {
-//       await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
+//       await axios.delete(`https://social-nest-backend.onrender.com/api/posts/${postId}`, {
 //         withCredentials: true,
 //       });
 //       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
@@ -526,7 +526,6 @@
 
 // export default Posts;
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -554,16 +553,22 @@ const Posts = ({ posts, setPosts }) => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         console.log("User response:", res.data);
         setCurrentUserId(res.data._id);
 
         // Fetch profile data for saved posts
-        const profileRes = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const profileRes = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const userSavedPosts = profileRes.data.savedPosts || [];
         console.log("userSavedPosts:", userSavedPosts);
 
@@ -603,7 +608,7 @@ const Posts = ({ posts, setPosts }) => {
   const commentSubmit = async (postId) => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${postId}/comment`,
+        `https://social-nest-backend.onrender.com/api/posts/${postId}/comment`,
         { commentText: commentText[postId] || "" },
         { withCredentials: true }
       );
@@ -626,15 +631,14 @@ const Posts = ({ posts, setPosts }) => {
   };
 
   const handleLike = async (id) => {
-    
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${id}/like`,
+        `https://social-nest-backend.onrender.com/api/posts/${id}/like`,
         {},
         { withCredentials: true }
       );
       console.log("Like response:", res.data);
-      
+
       // Update only the specific post's likes and liked status
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
@@ -647,7 +651,7 @@ const Posts = ({ posts, setPosts }) => {
             : post
         )
       );
-      
+
       // Update the likes state for the specific post
       setLikes((prevLikes) => ({
         ...prevLikes,
@@ -664,7 +668,7 @@ const Posts = ({ posts, setPosts }) => {
       const isSaved = savedPosts[postId];
       const endpoint = isSaved ? "unsave" : "save";
       const res = await axios.post(
-        `http://localhost:3000/api/auth/${postId}/${endpoint}`,
+        `https://social-nest-backend.onrender.com/api/auth/${postId}/${endpoint}`,
         {},
         { withCredentials: true }
       );
@@ -686,7 +690,7 @@ const Posts = ({ posts, setPosts }) => {
   };
 
   const handleShare = async (post) => {
-    const shareUrl = `http://localhost:3000/posts/${post._id}`;
+    const shareUrl = `https://social-nest-backend.onrender.com/posts/${post._id}`;
     const shareData = {
       title: `Post by ${post.user?.name || "User"}`,
       text: post.description || "Check out this post!",
@@ -694,7 +698,11 @@ const Posts = ({ posts, setPosts }) => {
     };
 
     try {
-      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare(shareData)
+      ) {
         await navigator.share(shareData);
         setShareMessage((prev) => ({
           ...prev,
@@ -771,7 +779,7 @@ const Posts = ({ posts, setPosts }) => {
     }
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/posts/${postId}`,
+        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
         { description: editDesc, image: editMedia, mediaType: editMediaType },
         { withCredentials: true }
       );
@@ -797,9 +805,12 @@ const Posts = ({ posts, setPosts }) => {
   const handleDelete = async (postId) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      await axios.delete(`http://localhost:3000/api/posts/${postId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://social-nest-backend.onrender.com/api/posts/${postId}`,
+        {
+          withCredentials: true,
+        }
+      );
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
       alert("Post deleted successfully");
     } catch (error) {

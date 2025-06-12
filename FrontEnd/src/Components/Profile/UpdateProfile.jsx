@@ -28,7 +28,7 @@ const UpdateProfile = () => {
 
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/user/UpdateProfile",
+        "https://social-nest-backend.onrender.com/api/user/UpdateProfile",
         { name, email, image },
         {
           headers: { "Content-Type": "application/json" },
@@ -53,9 +53,12 @@ const UpdateProfile = () => {
   const handleBackClick = async () => {
     try {
       // console.log('Back button clicked, verifying authentication');
-      await axios.get("http://localhost:3000/api/user/profile", {
-        withCredentials: true,
-      });
+      await axios.get(
+        "https://social-nest-backend.onrender.com/api/user/profile",
+        {
+          withCredentials: true,
+        }
+      );
       // console.log('Auth verified, navigating to profile page');
       navigate("/profile", { state: { fromUpdateProfile: true } });
     } catch (error) {

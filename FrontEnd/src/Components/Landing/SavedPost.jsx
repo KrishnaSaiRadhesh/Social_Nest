@@ -14,9 +14,12 @@ const SavedPosts = () => {
       try {
         setLoading(true);
         // Fetch all saved posts for the authenticated user
-        const res = await axios.get("http://localhost:3000/api/auth/saved-posts", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/saved-posts",
+          {
+            withCredentials: true,
+          }
+        );
         // Filter out null or invalid posts
         const validPosts = (res.data.savedPosts || []).filter(
           (post) =>
@@ -48,7 +51,8 @@ const SavedPosts = () => {
   }, [navigate]);
 
   const handleClearAll = async () => {
-    if (!window.confirm("Are you sure you want to clear all saved posts?")) return;
+    if (!window.confirm("Are you sure you want to clear all saved posts?"))
+      return;
     try {
       if (savedPosts.length === 0) {
         alert("No saved posts to clear!");
@@ -59,7 +63,7 @@ const SavedPosts = () => {
       await Promise.all(
         savedPosts.map((post) =>
           axios.post(
-            `http://localhost:3000/api/${post._id}/unsave`,
+            `https://social-nest-backend.onrender.com/api/${post._id}/unsave`,
             {},
             { withCredentials: true }
           )

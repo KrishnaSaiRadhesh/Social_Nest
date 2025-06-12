@@ -12,7 +12,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/user", {
+//         const res = await axios.get("https://social-nest-backend.onrender.com/api/user", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -38,7 +38,7 @@
 //     try {
 //       // Clear both JWT and session-based authentication
 //       const res = await axios.post(
-//         "http://localhost:3000/api/auth/logout",
+//         "https://social-nest-backend.onrender.com/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -48,7 +48,7 @@
 //         localStorage.clear();
 //         sessionStorage.clear();
 //         // Also clear Google session
-//         await axios.get("http://localhost:3000/auth/logout", {
+//         await axios.get("https://social-nest-backend.onrender.com/auth/logout", {
 //           withCredentials: true,
 //         });
 //         navigate("/login", { replace: true });
@@ -106,7 +106,6 @@
 
 // export default Header;
 
-
 // import React, { useEffect, useState } from "react";
 // import { IoNotifications } from "react-icons/io5";
 // import { FaBookmark } from "react-icons/fa6";
@@ -121,7 +120,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+//         const res = await axios.get("https://social-nest-backend.onrender.com/api/auth/Profile", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -145,7 +144,7 @@
 //   const handleLogout = async () => {
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:3000/api/auth/logout",
+//         "https://social-nest-backend.onrender.com/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -224,9 +223,12 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-backend.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
         console.log("User data:", data);
         setImage(data.image || "/Profile.png");
@@ -248,7 +250,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "https://social-nest-backend.onrender.com/api/auth/logout",
         {},
         { withCredentials: true }
       );
@@ -268,16 +270,20 @@ const Header = () => {
   return (
     <div className="bg-gray-100 p-3 sm:p-4 md:p-5 shadow-lg flex items-center justify-around relative">
       <div className="Logo flex items-center gap-2 sm:gap-3">
-        <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full" src="/Logo.png" alt="logo" />
-        <h2 className="text-xl sm:text-2xl lg:text-[28px] font-serif">Social Nest</h2>
+        <img
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+          src="/Logo.png"
+          alt="logo"
+        />
+        <h2 className="text-xl sm:text-2xl lg:text-[28px] font-serif">
+          Social Nest
+        </h2>
       </div>
 
       <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[5em]">
         {/* <IoNotifications className="w-5 h-5 sm:w-6 sm:h-6" /> */}
         <Link to="/saved" title="Saved Posts">
-          <FaBookmark
-            className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer hover:text-blue-500 transition"
-          />
+          <FaBookmark className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer hover:text-blue-500 transition" />
         </Link>
       </div>
 
