@@ -4,9 +4,9 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-  "dev": "nodemon backend/server.js",
+  "dev": "nodemon server.js",
   "build": "npm install && npm install --prefix FrontEnd && npm run build --prefix FrontEnd",
-  "start": "node backend/server.js"
+  "start": "node server.js"
 },
   "keywords": [],
   "author": "",
