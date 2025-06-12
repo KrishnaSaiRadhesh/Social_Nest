@@ -13,9 +13,12 @@ const Videos = () => {
     const fetchUserVideos = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/api/user/profile`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `https://social-nest-2.onrender.com/api/user/profile`,
+          {
+            withCredentials: true,
+          }
+        );
 
         const userData = res.data;
         // Filter posts to include only videos

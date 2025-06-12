@@ -12,7 +12,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/user", {
+//         const res = await axios.get("https://social-nest-2.onrender.com/api/user", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -38,7 +38,7 @@
 //     try {
 //       // Clear both JWT and session-based authentication
 //       const res = await axios.post(
-//         "http://localhost:3000/api/auth/logout",
+//         "https://social-nest-2.onrender.com/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -48,7 +48,7 @@
 //         localStorage.clear();
 //         sessionStorage.clear();
 //         // Also clear Google session
-//         await axios.get("http://localhost:3000/auth/logout", {
+//         await axios.get("https://social-nest-2.onrender.com/auth/logout", {
 //           withCredentials: true,
 //         });
 //         navigate("/login", { replace: true });
@@ -120,7 +120,7 @@
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+//         const res = await axios.get("https://social-nest-2.onrender.com/api/auth/Profile", {
 //           withCredentials: true,
 //         });
 //         const data = res.data;
@@ -144,7 +144,7 @@
 //   const handleLogout = async () => {
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:3000/api/auth/logout",
+//         "https://social-nest-2.onrender.com/api/auth/logout",
 //         {},
 //         { withCredentials: true }
 //       );
@@ -224,9 +224,12 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const data = res.data;
         console.log("User data:", data);
         setImage(data.image || "/Profile.png");
@@ -248,7 +251,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "https://social-nest-2.onrender.com/api/auth/logout",
         {},
         { withCredentials: true }
       );
