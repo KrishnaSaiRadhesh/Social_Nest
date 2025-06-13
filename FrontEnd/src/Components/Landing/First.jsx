@@ -282,7 +282,7 @@ const First = ({ socket }) => {
               <p className="text-sm text-gray-500">{email}</p>
             </div>
           </div>
-          <div className="section2 flex items-center justify-between mt-3 gap-3">
+          <div className="section2 flex items-center justify-around mt-3">
             <div className="text-center">
               <h2 className="font-semibold text-base sm:text-lg">
                 {followers?.length}

@@ -177,7 +177,6 @@
 // export default Third;
 
 
-
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
@@ -278,18 +277,20 @@ const Third = () => {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg">
-      <div className="p-2 sm:p-3 flex items-center gap-3 justify-between w-full mt-1">
-        <h2 className="text-base sm:text-lg font-medium px-5">Suggested for you</h2>
+    <div className="bg-white shadow-lg rounded-lg p-3 sm:p-4">
+      {/* Header Section */}
+      <div className="flex items-center justify-between w-full">
+        <h2 className="text-base sm:text-lg font-medium">Suggested for you</h2>
       </div>
 
-      <div className="bg-gray-100 flex justify-between items-center mt-1 gap-1 p-2 sm:p-3 rounded-2xl">
-        <div className="flex items-center gap-3 sm:gap-5">
+      {/* Search Bar Section */}
+      <div className="bg-gray-100 flex justify-between items-center mt-4 gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl">
+        <div className="flex items-center gap-2 sm:gap-3">
           <FiSearch className="text-base sm:text-lg" />
           <input
             type="text"
             placeholder="Search"
-            className="outline-none bg-gray-100 text-sm sm:text-base"
+            className="outline-none bg-gray-100 text-sm sm:text-base w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -297,20 +298,21 @@ const Third = () => {
         <IoFilterSharp className="text-base sm:text-lg" />
       </div>
 
-      <div className="mt-3">
+      {/* User List Section */}
+      <div className="mt-4 sm:mt-5">
         {loading ? (
-          <p className="text-sm sm:text-base">Loading...</p>
+          <p className="text-sm sm:text-base text-center">Loading...</p>
         ) : (
-          <div className="flex flex-col items-left gap-4 sm:gap-5 mt-4 sm:mt-5">
+          <div className="flex flex-col items-left gap-4 sm:gap-5">
             {filteredUsers.length === 0 ? (
-              <p className="text-sm sm:text-base">No valid users found</p>
+              <p className="text-sm sm:text-base text-center">No valid users found</p>
             ) : (
               filteredUsers.map((user) => (
                 <div
                   key={user._id}
-                  className="flex items-center justify-between gap-3 sm:gap-5 px-3 sm:px-5"
+                  className="flex items-center justify-between gap-3 sm:gap-4"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={user.image || "/Profile.png"}
                       alt=""
