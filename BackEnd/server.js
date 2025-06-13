@@ -63,7 +63,6 @@ passport.use(
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://funny-pony-68b842.netlify.app",
   "https://social-nest-ivory.vercel.app",
 ];
 
