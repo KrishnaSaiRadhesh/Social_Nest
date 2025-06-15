@@ -20,12 +20,9 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+          withCredentials: true,
+        });
         const data = res.data;
         setName(data.name);
         setEmail(data.email);

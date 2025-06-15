@@ -7,7 +7,7 @@
 // import { toast, ToastContainer } from "react-toastify";
 // import io from "socket.io-client";
 
-// const socket = io("https://social-nest-2.onrender.com", {
+// const socket = io("http://localhost:5173", {
 //   withCredentials: true,
 // });
 
@@ -37,7 +37,7 @@
 //   useEffect(() => {
 //     const fetchProfile = async () => {
 //       try {
-//         const res = await axios.get("https://social-nest-2.onrender.com/api/user/Profile", {
+//         const res = await axios.get("http://localhost:5173/api/user/Profile", {
 //           withCredentials: true,
 //         });
 //         setProfileImage(res.data.image);
@@ -53,7 +53,7 @@
 //   useEffect(() => {
 //     const fetchStories = async () => {
 //       try {
-//         const res = await axios.get("https://social-nest-2.onrender.com/api/stories", {
+//         const res = await axios.get("http://localhost:5173/api/stories", {
 //           withCredentials: true,
 //         });
 //         setStories(res.data);
@@ -80,7 +80,7 @@
 //     const fetchPosts = async () => {
 //       setLoading(true);
 //       try {
-//         const res = await axios.get("https://social-nest-2.onrender.com/api/posts", {
+//         const res = await axios.get("http://localhost:5173/api/posts", {
 //           withCredentials: true,
 //         });
 //         setPosts(
@@ -162,7 +162,7 @@
 //     try {
 //       setLoading(true);
 //       await axios.post(
-//         "https://social-nest-2.onrender.com/api/stories/create",
+//         "http://localhost:5173/api/stories/create",
 //         {
 //           media: storyImage,
 //           mediaType: "image",
@@ -197,7 +197,7 @@
 //     try {
 //       setLoading(true);
 //       const res = await axios.put(
-//         `https://social-nest-2.onrender.com/api/stories/${editingStory}`,
+//         `http://localhost:5173/api/stories/${editingStory}`,
 //         {
 //           media: editStoryImage,
 //           mediaType: "image",
@@ -249,7 +249,7 @@
 
 //     try {
 //       setLoading(true);
-//       await axios.delete(`https://social-nest-2.onrender.com/api/stories/${storyId}`, {
+//       await axios.delete(`http://localhost:5173/api/stories/${storyId}`, {
 //         withCredentials: true,
 //       });
 //       setStories((prevStories) =>
@@ -283,7 +283,7 @@
 //     setStoryIndex(index);
 //     try {
 //       await axios.post(
-//         `https://social-nest-2.onrender.com/api/stories/${userStories[index]._id}/view`,
+//         `http://localhost:5173/api/stories/${userStories[index]._id}/view`,
 //         {},
 //         { withCredentials: true }
 //       );
@@ -365,7 +365,7 @@
 //       //   image: postImage.slice(0, 50) + '...',
 //       // });
 //       const res = await axios.post(
-//         "https://social-nest-2.onrender.com/api/posts/CreatePost",
+//         "http://localhost:5173/api/posts/CreatePost",
 //         { description: desc, image: postImage, mediaType },
 //         {
 //           headers: { "Content-Type": "application/json" },
@@ -727,7 +727,7 @@ import Posts from "./Posts";
 import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 
-const socket = io("https://social-nest-2.onrender.com", {
+const socket = io("http://localhost:5173", {
   withCredentials: true,
 });
 
@@ -758,7 +758,7 @@ const Second = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/Profile",
+          "http://localhost:5173/api/auth/Profile",
           {
             withCredentials: true,
           }
@@ -778,7 +778,7 @@ const Second = () => {
     const fetchStories = async () => {
       try {
         const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/stories",
+          "http://localhost:5173/api/stories",
           {
             withCredentials: true,
           }
@@ -808,7 +808,7 @@ const Second = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/posts",
+          "http://localhost:5173/api/posts",
           {
             withCredentials: true,
           }
@@ -833,10 +833,6 @@ const Second = () => {
   const handleStoryImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Story file is too large. Maximum size is 5MB.");
-        return;
-      }
       if (!file.type.startsWith("image/")) {
         toast.error("Please select a valid image for the story.");
         return;
@@ -890,7 +886,7 @@ const Second = () => {
     try {
       setLoading(true);
       await axios.post(
-        "https://social-nest-2.onrender.com/api/stories/create",
+        "http://localhost:5173/api/stories/create",
         {
           media: storyImage,
           mediaType: "image",
@@ -925,7 +921,7 @@ const Second = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `https://social-nest-2.onrender.com/api/stories/${editingStory}`,
+        `http://localhost:5173/api/stories/${editingStory}`,
         {
           media: editStoryImage,
           mediaType: "image",
@@ -978,7 +974,7 @@ const Second = () => {
     try {
       setLoading(true);
       await axios.delete(
-        `https://social-nest-2.onrender.com/api/stories/${storyId}`,
+        `http://localhost:5173/api/stories/${storyId}`,
         {
           withCredentials: true,
         }
@@ -1014,7 +1010,7 @@ const Second = () => {
     setStoryIndex(index);
     try {
       await axios.post(
-        `https://social-nest-2.onrender.com/api/stories/${userStories[index]._id}/view`,
+        `http://localhost:5173/api/stories/${userStories[index]._id}/view`,
         {},
         { withCredentials: true }
       );
@@ -1088,7 +1084,7 @@ const Second = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://social-nest-2.onrender.com/api/posts/CreatePost",
+        "http://localhost:5173/api/posts/CreatePost",
         { description: desc, image: postImage, mediaType },
         {
           headers: { "Content-Type": "application/json" },

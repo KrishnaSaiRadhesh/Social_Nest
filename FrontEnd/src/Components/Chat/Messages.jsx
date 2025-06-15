@@ -22,12 +22,9 @@ const ChatApp = ({ socket }) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/user/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/user/Profile", {
+          withCredentials: true,
+        });
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user ID:", error);
@@ -36,12 +33,9 @@ const ChatApp = ({ socket }) => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/friends",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/friends", {
+          withCredentials: true,
+        });
         // console.log(res.data)
         setFriends(res.data);
         // console.log("friends",friends)
@@ -54,7 +48,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-2.onrender.com/api/user/${friendId}`,
+            `http://localhost:3000/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -79,7 +73,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-2.onrender.com/api/messages/${friendId}`,
+            `http://localhost:3000/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -155,7 +149,7 @@ const ChatApp = ({ socket }) => {
       if (imageFile) formData.append("image", imageFile);
 
       const res = await axios.post(
-        "https://social-nest-2.onrender.com/api/messages",
+        "http://localhost:3000/api/messages",
         formData,
         {
           withCredentials: true,

@@ -24,7 +24,7 @@ const UserProfile = () => {
         setLoading(true);
 
         const profileRes = await axios.get(
-          `https://social-nest-2.onrender.com/api/user/${id}`,
+          `http://localhost:3000/api/user/${id}`,
           {
             withCredentials: true,
           }
@@ -39,7 +39,7 @@ const UserProfile = () => {
         setPosts(profileData.posts || []);
 
         const currentUserRes = await axios.get(
-          "https://social-nest-2.onrender.com/api/user/profile",
+          "http://localhost:3000/api/user/profile",
           {
             withCredentials: true,
           }
@@ -75,7 +75,7 @@ const UserProfile = () => {
   const handleFollow = async () => {
     try {
       await axios.post(
-        `https://social-nest-2.onrender.com/api/user/follow/${id}`,
+        `http://localhost:3000/api/user/follow/${id}`,
         {},
         { withCredentials: true }
       );
@@ -90,7 +90,7 @@ const UserProfile = () => {
   const handleUnFollow = async () => {
     try {
       await axios.post(
-        `https://social-nest-2.onrender.com/api/user/unfollow/${id}`,
+        `http://localhost:3000/api/user/unfollow/${id}`,
         {},
         { withCredentials: true }
       );

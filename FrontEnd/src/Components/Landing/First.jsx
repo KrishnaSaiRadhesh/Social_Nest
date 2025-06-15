@@ -30,7 +30,7 @@ const First = ({ socket }) => {
       try {
         // Check if user is authenticated (Google or JWT)
         const authRes = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/Profile",
+          "http://localhost:3000/api/auth/Profile",
           {
             withCredentials: true,
           }
@@ -46,12 +46,9 @@ const First = ({ socket }) => {
         setImage(user.image || "./Profile.png");
 
         // Fetch profile data from your custom endpoint
-        const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/Profile",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
+          withCredentials: true,
+        });
         const data = res.data;
         setFollowers(data.followers);
         setFollowing(data.following);
