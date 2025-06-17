@@ -526,7 +526,6 @@
 
 // export default Posts;
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -534,6 +533,7 @@ import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { FaEdit, FaRegComment, FaTrash } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
+import { toast, ToastContainer } from "react-toastify";
 
 const Posts = ({ posts, setPosts }) => {
   const [loading, setLoading] = useState(true);
@@ -561,9 +561,12 @@ const Posts = ({ posts, setPosts }) => {
         setCurrentUserId(res.data._id);
 
         // Fetch profile data for saved posts
-        const profileRes = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const profileRes = await axios.get(
+          "http://localhost:3000/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         const userSavedPosts = profileRes.data.savedPosts || [];
         console.log("userSavedPosts:", userSavedPosts);
 
@@ -618,15 +621,14 @@ const Posts = ({ posts, setPosts }) => {
         )
       );
       setCommentText((prev) => ({ ...prev, [postId]: "" }));
-      alert("Commented successfully");
+      toast.success("Commented successfully");
     } catch (error) {
       console.error("Error commenting:", error);
-      alert(error.response?.data?.message || "Failed to comment.");
+      toast.error(error.response?.data?.message || "Failed to comment.");
     }
   };
 
   const handleLike = async (id) => {
-    
     try {
       const res = await axios.post(
         `http://localhost:3000/api/posts/${id}/like`,
@@ -634,7 +636,7 @@ const Posts = ({ posts, setPosts }) => {
         { withCredentials: true }
       );
       console.log("Like response:", res.data);
-      
+
       // Update only the specific post's likes and liked status
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
@@ -647,7 +649,7 @@ const Posts = ({ posts, setPosts }) => {
             : post
         )
       );
-      
+
       // Update the likes state for the specific post
       setLikes((prevLikes) => ({
         ...prevLikes,
@@ -655,7 +657,7 @@ const Posts = ({ posts, setPosts }) => {
       }));
     } catch (err) {
       console.error("Like failed:", err);
-      alert(err.response?.data?.message || "Failed to like post.");
+      toast.error(err.response?.data?.message || "Failed to like post.");
     }
   };
 
@@ -672,13 +674,13 @@ const Posts = ({ posts, setPosts }) => {
         ...prevSaved,
         [postId]: res.data.saved,
       }));
-      alert(res.data.saved ? "Post saved!" : "Post unsaved!");
+      toast.success(res.data.saved ? "Post saved!" : "Post unsaved!");
     } catch (error) {
       console.error(
         `Error ${savedPosts[postId] ? "unsaving" : "saving"} post:`,
         error
       );
-      alert(
+      toast.error(
         error.response?.data?.message ||
           `Failed to ${savedPosts[postId] ? "unsave" : "save"} post.`
       );
@@ -694,7 +696,11 @@ const Posts = ({ posts, setPosts }) => {
     };
 
     try {
-      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare(shareData)
+      ) {
         await navigator.share(shareData);
         setShareMessage((prev) => ({
           ...prev,
@@ -787,7 +793,7 @@ const Posts = ({ posts, setPosts }) => {
       setEditMedia("");
       setEditMediaType("image");
       setEditMessage("");
-      alert("Post updated successfully");
+      toast.success("Post updated successfully");
     } catch (error) {
       console.error("Error updating post:", error);
       setEditMessage(error.response?.data?.message || "Failed to update post.");
@@ -801,10 +807,10 @@ const Posts = ({ posts, setPosts }) => {
         withCredentials: true,
       });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-      alert("Post deleted successfully");
+      toast.success("Post deleted successfully");
     } catch (error) {
       console.error("Error deleting post:", error);
-      alert(error.response?.data?.message || "Failed to delete post.");
+      toast.error(error.response?.data?.message || "Failed to delete post.");
     }
   };
 
@@ -1065,6 +1071,7 @@ const Posts = ({ posts, setPosts }) => {
       ) : (
         <p className="text-center text-gray-500">No posts found</p>
       )}
+      <ToastContainer />
     </div>
   );
 };

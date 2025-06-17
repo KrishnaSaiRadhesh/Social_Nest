@@ -90,7 +90,6 @@ const ChatApp = ({ socket }) => {
   // Socket.io setup
   useEffect(() => {
     socket.on("connect", () => {
-      // console.log('Socket connected:', socket.id);
       if (userId) {
         socket.emit("join", userId);
       }
@@ -195,7 +194,7 @@ const ChatApp = ({ socket }) => {
   };
 
   const handleBackClick = () => {
-    navigate("/messages");
+    navigate("/home");
   };
 
   return (
