@@ -369,7 +369,6 @@
 
 // export default ChatApp;
 
-
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -394,9 +393,12 @@ const ChatApp = ({ socket }) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/user/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user ID:", error);
@@ -405,9 +407,12 @@ const ChatApp = ({ socket }) => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/friends", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/auth/friends",
+          {
+            withCredentials: true,
+          }
+        );
         // console.log(res.data)
         setFriends(res.data);
       } catch (error) {
@@ -419,7 +424,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/user/${friendId}`,
+            `https://social-nest-2.onrender.com/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -444,7 +449,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/messages/${friendId}`,
+            `https://social-nest-2.onrender.com/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -519,7 +524,7 @@ const ChatApp = ({ socket }) => {
       if (imageFile) formData.append("image", imageFile);
 
       const res = await axios.post(
-        "http://localhost:3000/api/messages",
+        "https://social-nest-2.onrender.com/api/messages",
         formData,
         {
           withCredentials: true,
@@ -665,7 +670,9 @@ const ChatApp = ({ socket }) => {
                           : "bg-blue-500 text-white"
                       }`}
                     >
-                      {msg.content && <p className="text-sm sm:text-base">{msg.content}</p>}
+                      {msg.content && (
+                        <p className="text-sm sm:text-base">{msg.content}</p>
+                      )}
                       {msg.image && (
                         <img
                           src={msg.image}

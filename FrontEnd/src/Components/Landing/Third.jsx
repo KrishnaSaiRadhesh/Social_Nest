@@ -176,7 +176,6 @@
 
 // export default Third;
 
-
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
@@ -197,7 +196,7 @@ const Third = () => {
       setLoading(true);
       try {
         const profileRes = await axios.get(
-          "http://localhost:3000/api/user/profile",
+          "https://social-nest-2.onrender.com/api/user/profile",
           {
             withCredentials: true,
           }
@@ -207,7 +206,7 @@ const Third = () => {
         const followingList = currentUserData.following || [];
 
         const res = await axios.get(
-          "http://localhost:3000/api/auth/suggested",
+          "https://social-nest-2.onrender.com/api/auth/suggested",
           {
             withCredentials: true,
           }
@@ -249,7 +248,7 @@ const Third = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/follow/${userId}`,
+        `https://social-nest-2.onrender.com/api/user/follow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -262,7 +261,7 @@ const Third = () => {
   const handleUnFollow = async (userId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/user/unfollow/${userId}`,
+        `https://social-nest-2.onrender.com/api/user/unfollow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -280,7 +279,7 @@ const Third = () => {
     }
   };
 
-   return (
+  return (
     <div className="bg-white shadow-lg rounded-lg p-3 sm:p-4">
       {/* Header Section */}
       <div className="flex items-center justify-between w-full">
@@ -309,7 +308,9 @@ const Third = () => {
         ) : (
           <div className="flex flex-col items-left gap-4 sm:gap-5">
             {filteredUsers.length === 0 ? (
-              <p className="text-sm sm:text-base text-center">No valid users found</p>
+              <p className="text-sm sm:text-base text-center">
+                No valid users found
+              </p>
             ) : (
               filteredUsers.map((user) => (
                 <div

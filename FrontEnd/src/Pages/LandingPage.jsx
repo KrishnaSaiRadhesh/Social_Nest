@@ -4,7 +4,7 @@
 // import Second from '../Components/Landing/Second'
 // import Third from '../Components/Landing/Third'
 // import io from 'socket.io-client';
-// const socket = io('http://localhost:3000', { withCredentials: true });
+// const socket = io('https://social-nest-2.onrender.com', { withCredentials: true });
 // const LandingPage = () => {
 //   return (
 //     <div className='h-screen flex flex-col'>
@@ -85,7 +85,6 @@
 
 // export default LandingPage;
 
-
 // import React from "react";
 // import { Routes, Route } from "react-router-dom";
 // import Header from "../Components/Landing/Header";
@@ -134,7 +133,6 @@
 // };
 
 // export default LandingPage;
-
 
 import React from "react";
 import { Routes, Route } from "react-router-dom";

@@ -727,7 +727,7 @@ import Posts from "./Posts";
 import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3000", {
+const socket = io("https://social-nest-2.onrender.com", {
   withCredentials: true,
 });
 
@@ -757,9 +757,12 @@ const Second = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/auth/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         console.log("User response:", res.data);
         setProfileImage(res.data.image || "/Profile.png");
         setCurrentUserId(res.data._id);
@@ -774,9 +777,12 @@ const Second = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/stories", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/stories",
+          {
+            withCredentials: true,
+          }
+        );
         setStories(res.data);
         console.log("Fetching stories data:", res.data);
       } catch (error) {
@@ -801,9 +807,12 @@ const Second = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:3000/api/posts", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/posts",
+          {
+            withCredentials: true,
+          }
+        );
         setPosts(
           res.data.map((post) => ({
             ...post,
@@ -881,7 +890,7 @@ const Second = () => {
     try {
       setLoading(true);
       await axios.post(
-        "http://localhost:3000/api/stories/create",
+        "https://social-nest-2.onrender.com/api/stories/create",
         {
           media: storyImage,
           mediaType: "image",
@@ -916,7 +925,7 @@ const Second = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `http://localhost:3000/api/stories/${editingStory}`,
+        `https://social-nest-2.onrender.com/api/stories/${editingStory}`,
         {
           media: editStoryImage,
           mediaType: "image",
@@ -968,9 +977,12 @@ const Second = () => {
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3000/api/stories/${storyId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://social-nest-2.onrender.com/api/stories/${storyId}`,
+        {
+          withCredentials: true,
+        }
+      );
       setStories((prevStories) =>
         prevStories.filter((story) => story._id !== storyId)
       );
@@ -1002,7 +1014,7 @@ const Second = () => {
     setStoryIndex(index);
     try {
       await axios.post(
-        `http://localhost:3000/api/stories/${userStories[index]._id}/view`,
+        `https://social-nest-2.onrender.com/api/stories/${userStories[index]._id}/view`,
         {},
         { withCredentials: true }
       );
@@ -1076,7 +1088,7 @@ const Second = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:3000/api/posts/CreatePost",
+        "https://social-nest-2.onrender.com/api/posts/CreatePost",
         { description: desc, image: postImage, mediaType },
         {
           headers: { "Content-Type": "application/json" },
@@ -1130,7 +1142,10 @@ const Second = () => {
           />
         </div>
         {Object.values(groupedStories).map(({ user, stories }) => (
-          <div key={user._id} className="flex flex-col items-center flex-shrink-0">
+          <div
+            key={user._id}
+            className="flex flex-col items-center flex-shrink-0"
+          >
             <img
               src={user.image || "/Profile.png"}
               alt={user.name || user.username}
@@ -1290,7 +1305,7 @@ const Second = () => {
                   value={editStoryDescription}
                   onChange={(e) => setEditStoryDescription(e.target.value)}
                   maxLength={200}
-                   className="w-full p-3 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
+                  className="w-full p-3 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
                   rows={3}
                 />
                 <p className="text-xs sm:text-sm text-gray-500">
@@ -1339,10 +1354,12 @@ const Second = () => {
             value={storyDescription}
             onChange={(e) => setStoryDescription(e.target.value)}
             maxLength={200}
-             className="w-full p-3 mt-2 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
+            className="w-full p-3 mt-2 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
             rows={3}
           />
-          <p className="text-xs sm:text-sm text-gray-500">{storyDescription.length}/200</p>
+          <p className="text-xs sm:text-sm text-gray-500">
+            {storyDescription.length}/200
+          </p>
           <button
             type="submit"
             className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg mt-2 text-sm sm:text-base"

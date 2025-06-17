@@ -22,9 +22,12 @@ const ChatApp = ({ socket }) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/Profile", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/user/Profile",
+          {
+            withCredentials: true,
+          }
+        );
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user ID:", error);
@@ -33,9 +36,12 @@ const ChatApp = ({ socket }) => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/friends", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://social-nest-2.onrender.com/api/auth/friends",
+          {
+            withCredentials: true,
+          }
+        );
         setFriends(res.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -46,7 +52,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/user/${friendId}`,
+            `https://social-nest-2.onrender.com/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -71,7 +77,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/messages/${friendId}`,
+            `https://social-nest-2.onrender.com/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -131,49 +137,49 @@ const ChatApp = ({ socket }) => {
   }, [messages]);
 
   // Handle sending messages
- const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!newMessage.trim() && !imageFile) {
-    setError("Please provide a message or select an image");
-    return;
-  }
-
-  try {
-    setError("");
-    const formData = new FormData();
-    formData.append("receiverId", friendId);
-    if (newMessage) formData.append("content", newMessage);
-    if (imageFile) formData.append("image", imageFile);
-
-    // Log FormData entries
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!newMessage.trim() && !imageFile) {
+      setError("Please provide a message or select an image");
+      return;
     }
 
-    const res = await axios.post(
-      "http://localhost:3000/api/messages",
-      formData,
-      {
+    try {
+      setError("");
+      const formData = new FormData();
+      formData.append("receiverId", friendId);
+      if (newMessage) formData.append("content", newMessage);
+      if (imageFile) formData.append("image", imageFile);
+
+      // Log FormData entries
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      const res = await axios.post(
+        "https://social-nest-2.onrender.com/api/messages",
+        formData,
+        {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         }
-    );
-    const sentMessage = res.data;
-    setMessages((prev) => {
-      if (prev.some((msg) => msg._id === sentMessage._id)) return prev;
-      return [...prev, sentMessage];
-    });
-    const roomId = [userId, friendId].sort().join("-");
-    socket.emit("sendMessage", { ...sentMessage, roomId });
-    setNewMessage("");
-    setImageFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  } catch (error) {
-    const errorMessage = error.response?.data?.message || error.message;
-    console.error('Client error:', errorMessage);
-    setError(errorMessage);
-  }
-};
+      );
+      const sentMessage = res.data;
+      setMessages((prev) => {
+        if (prev.some((msg) => msg._id === sentMessage._id)) return prev;
+        return [...prev, sentMessage];
+      });
+      const roomId = [userId, friendId].sort().join("-");
+      socket.emit("sendMessage", { ...sentMessage, roomId });
+      setNewMessage("");
+      setImageFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("Client error:", errorMessage);
+      setError(errorMessage);
+    }
+  };
 
   // Handle image upload
   const handleImageChange = (e) => {
@@ -298,7 +304,9 @@ const ChatApp = ({ socket }) => {
                           : "bg-blue-500 text-white"
                       }`}
                     >
-                      {msg.content && <p className="text-sm sm:text-base">{msg.content}</p>}
+                      {msg.content && (
+                        <p className="text-sm sm:text-base">{msg.content}</p>
+                      )}
                       {msg.image && (
                         <img
                           src={msg.image}
