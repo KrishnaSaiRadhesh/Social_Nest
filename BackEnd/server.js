@@ -15,11 +15,6 @@ const User = require('./Models/Auth');
 dotenv.config();
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://social-nest-ivory.vercel.app",
-];
-
 const corsOptions = {
   origin: allowedOrigins,
   credentials: true,
