@@ -15,9 +15,31 @@ const User = require("./Models/Auth");
 dotenv.config();
 const app = express();
 
-app.use(fileUpload()); // ⬅️ This enables req.files
-app.use(express.json()); // For JSON
-app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://social-nest-ivory.vercel.app",
+];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+// Optional: handle preflight requests (for methods like POST/PUT with headers)
+app.options("*", cors(corsOptions));
+
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 }, // ✅ 50 MB limit
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(cookieParser());
 
 // Passport configuration
 passport.serializeUser((user, done) => {
@@ -61,10 +83,6 @@ passport.use(
   )
 );
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://social-nest-ivory.vercel.app",
-];
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -74,9 +92,7 @@ const io = new Server(server, {
   },
 });
 
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(cookieParser());
+
 
 // Configure express-session for Passport
 app.use(
@@ -94,11 +110,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const corsOptions = {
-  origin: allowedOrigins,
-  credentials: true,
-};
-app.use(cors(corsOptions));
+
 
 // Google Auth Routes
 app.get(
@@ -144,7 +156,7 @@ app.get("/auth/logout", (req, res) => {
 
 // Existing Routes
 app.use("/api/auth", authRouter);
-app.use("/api/user", require("./Routes/UserRoute"));
+app.use("/api/users", require("./Routes/UserRoute"));
 app.use("/api/posts", require("./Routes/PostRouter"));
 app.use("/api/messages", require("./Routes/MessageRouter"));
 app.use("/api/stories", require("./Routes/StoryRouter")(io));
