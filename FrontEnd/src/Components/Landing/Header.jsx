@@ -266,32 +266,38 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-3 sm:p-4 md:p-5 shadow-lg flex items-center justify-around relative">
-      <div className="Logo flex items-center gap-2 sm:gap-3">
-        <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full" src="/Logo.png" alt="logo" />
-        <h2 className="text-xl sm:text-2xl lg:text-[28px] font-serif">Social Nest</h2>
+    <div className="bg-gray-100 p-3 shadow-lg flex items-center justify-between relative w-full">
+      {/* Logo Section */}
+      <div className="flex items-center pl-4 sm:pl-8 md:pl-12 lg:pl-20 gap-2 sm:gap-3">
+        <img
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+          src="/Logo.png"
+          alt="logo"
+        />
+        <h2 className="text-lg sm:text-xl md:text-2xl lg:text-[28px] font-serif">
+          Social Nest
+        </h2>
       </div>
 
-      <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[5em]">
-        {/* <IoNotifications className="w-5 h-5 sm:w-6 sm:h-6" /> */}
-        <Link to="/saved" title="Saved Posts">
-          <FaBookmark
-            className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer hover:text-blue-500 transition"
-          />
-        </Link>
-      </div>
-
-      <div className="relative">
-        <div className="cursor-pointer" onClick={toggleModel}>
-          <img
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
-            src={image || "/Profile.png"}
-            alt="profile"
-          />
+      {/* Profile Section */}
+      <div className="relative pr-4 sm:pr-8 md:pr-12 lg:pr-20">
+        <div className="flex items-center justify-center gap-4 sm:gap-5">
+          <Link to="/saved" title="Saved Posts">
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl lg:hidden text-gray-700 hover:text-blue-500">
+              <FaBookmark className="text-xl sm:text-2xl" />
+            </h3>
+          </Link>
+          <div className="cursor-pointer flex items-center justify-center" onClick={toggleModel}>
+            <img
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+              src={image || "/Profile.png"}
+              alt="profile"
+            />
+          </div>
         </div>
 
         {modelopen && (
-          <div className="bg-white shadow-xl rounded-xl absolute right-0 mt-2 overflow-hidden w-36 sm:w-40 p-2 sm:p-3 z-50">
+          <div className="bg-white shadow-xl rounded-xl absolute right-0 mt-2 overflow-hidden w-32 sm:w-36 md:w-40 p-2 sm:p-3 z-50">
             <Link to="/profile">
               <p className="cursor-pointer hover:bg-gray-200 px-2 py-1 text-sm sm:text-base">
                 My profile

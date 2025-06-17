@@ -1111,16 +1111,16 @@ const Second = () => {
   };
 
   return (
-    <div className="p-4 h-screen">
+    <div className="py-1 pb-16 lg:pb-0">
       <div className="Status bg-white shadow-lg rounded-2xl p-3 flex items-center w-full gap-5 overflow-x-auto">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center flex-shrink-0">
           <label htmlFor="storyImage" className="cursor-pointer">
             <img
               src={profileImage || "/Profile.png"}
               alt="Add Story"
-              className="w-20 h-20 rounded-full border-3 border-blue-500"
+              className="w-16 sm:w-20 h-16 sm:h-20 rounded-full border-2 sm:border-3 border-blue-500"
             />
-            <span className="text-xs pt-10">Add Story</span>
+            <span className="text-xs mt-1">Add Story</span>
           </label>
           <input
             id="storyImage"
@@ -1131,11 +1131,11 @@ const Second = () => {
           />
         </div>
         {Object.values(groupedStories).map(({ user, stories }) => (
-          <div key={user._id} className="flex flex-col items-center">
+          <div key={user._id} className="flex flex-col items-center flex-shrink-0">
             <img
               src={user.image || "/Profile.png"}
               alt={user.name || user.username}
-              className="w-20 h-20 rounded-full border-3 border-red-500 cursor-pointer"
+              className="w-16 sm:w-20 h-16 sm:h-20 rounded-full border-2 sm:border-3 border-red-500 cursor-pointer"
               onClick={() => handleStoryClick(stories, 0)}
             />
             <span className="text-xs mt-1">{user.name || user.username}</span>
@@ -1160,17 +1160,17 @@ const Second = () => {
             ))}
           </div>
 
-          <div className="absolute top-10 left-20 flex gap-3 items-center">
+          <div className="absolute top-6 sm:top-10 left-4 sm:left-20 flex gap-3 items-center">
             <img
               src={currentStory[storyIndex].userId.image || "/Profile.png"}
-              className="h-10 w-10 rounded-full"
+              className="h-8 sm:h-10 w-8 sm:w-10 rounded-full"
               alt="User"
             />
             <div>
-              <h3 className="text-white text-[16px]">
+              <h3 className="text-white text-sm sm:text-base">
                 {currentStory[storyIndex].userId.name || "User"}
               </h3>
-              <p className="text-white text-[16px]">
+              <p className="text-white text-xs sm:text-sm">
                 {new Date(
                   currentStory[storyIndex].createdAt
                 ).toLocaleDateString("en-GB", {
@@ -1185,15 +1185,15 @@ const Second = () => {
           <img
             src={currentStory[storyIndex].media}
             alt="Story"
-            className="max-h-full max-w-full object-contain"
+            className="max-h-[80vh] max-w-[90vw] object-contain"
           />
           {currentStory[storyIndex].description && (
-            <p className="absolute bottom-10 left-0 right-0 text-center text-white text-lg font-semibold drop-shadow-lg">
+            <p className="absolute bottom-10 left-0 right-0 text-center text-white text-base sm:text-lg font-semibold drop-shadow-lg">
               {currentStory[storyIndex].description}
             </p>
           )}
           <button
-            className="absolute top-4 right-4 text-white text-2xl"
+            className="absolute top-4 right-4 text-white text-xl sm:text-2xl"
             onClick={() => {
               setCurrentStory(null);
               setStoryIndex(0);
@@ -1209,12 +1209,12 @@ const Second = () => {
               <div className="absolute top-4 right-12">
                 <button
                   onClick={() => setShowStoryMenu(!showStoryMenu)}
-                  className="text-white text-2xl"
+                  className="text-white text-xl sm:text-2xl"
                 >
                   <BsThreeDotsVertical />
                 </button>
                 {showStoryMenu && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-36 sm:w-40 bg-white rounded-lg shadow-lg z-50">
                     <button
                       onClick={() => {
                         setEditingStory(currentStory[storyIndex]._id);
@@ -1226,7 +1226,7 @@ const Second = () => {
                         setShowStoryMenu(false);
                         setIsEditing(true);
                       }}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full px-3 sm:px-4 py-2 text-gray-800 hover:bg-gray-100 text-sm sm:text-base"
                     >
                       <BsPencilSquare />
                       Edit Story
@@ -1236,7 +1236,7 @@ const Second = () => {
                         handleStoryDelete(currentStory[storyIndex]._id);
                         setShowStoryMenu(false);
                       }}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full px-3 sm:px-4 py-2 text-red-600 hover:bg-gray-100 text-sm sm:text-base"
                     >
                       <BsTrash />
                       Delete Story
@@ -1246,7 +1246,7 @@ const Second = () => {
               </div>
             )}
           <button
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-3xl p-4"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl sm:text-3xl p-2 sm:p-4"
             onClick={() => {
               if (storyIndex > 0) {
                 setStoryIndex(storyIndex - 1);
@@ -1256,7 +1256,7 @@ const Second = () => {
             {"<"}
           </button>
           <button
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-3xl p-4"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl sm:text-3xl p-2 sm:p-4"
             onClick={() => {
               if (storyIndex < currentStory.length - 1) {
                 setStoryIndex(storyIndex + 1);
@@ -1273,28 +1273,28 @@ const Second = () => {
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center z-60">
               <form
                 onSubmit={handleStoryUpdate}
-                className="bg-white shadow-lg w-full max-w-md p-5 rounded-2xl"
+                className="bg-white shadow-lg w-full max-w-sm sm:max-w-md p-4 sm:p-5 rounded-2xl"
               >
                 <img
                   src={editStoryPreview}
                   alt="preview"
-                  className="h-[200px] w-full object-cover rounded-xl"
+                  className="h-[150px] sm:h-[200px] w-full object-cover rounded-xl"
                 />
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleEditStoryImageChange}
-                  className="block w-full my-2 text-gray-700"
+                  className="block w-full my-2 text-gray-700 text-sm sm:text-base"
                 />
                 <textarea
                   placeholder="Add a description..."
                   value={editStoryDescription}
                   onChange={(e) => setEditStoryDescription(e.target.value)}
                   maxLength={200}
-                  className="w-full p-3 rounded-xl bg-gray-100 focus:outline-none text-black resize-none"
+                   className="w-full p-3 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
                   rows={3}
                 />
-                <p className="text-sm text-gray-500">
+                <p className="text-xs sm:text-sm text-gray-500">
                   {editStoryDescription.length}/200
                 </p>
                 <div className="flex gap-2 mt-2">
@@ -1314,7 +1314,7 @@ const Second = () => {
                       setEditStoryDescription("");
                       setIsEditing(false);
                     }}
-                    className="bg-gray-500 text-white p-2 rounded-lg"
+                    className="bg-gray-500 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base"
                   >
                     Cancel
                   </button>
@@ -1328,25 +1328,25 @@ const Second = () => {
       {storyPreview && !editingStory && (
         <form
           onSubmit={handleStorySubmit}
-          className="bg-white shadow-lg w-full p-5 mt-2 rounded-2xl"
+          className="bg-white shadow-lg w-full p-4 sm:p-5 mt-2 rounded-2xl"
         >
           <img
             src={storyPreview}
             alt="preview"
-            className="h-[200px] w-full object-cover rounded-xl"
+            className="h-[150px] sm:h-[200px] w-full object-cover rounded-xl"
           />
           <textarea
             placeholder="Add a description..."
             value={storyDescription}
             onChange={(e) => setStoryDescription(e.target.value)}
             maxLength={200}
-            className="w-full p-3 mt-2 rounded-xl bg-gray-100 focus:outline-none text-black resize-none"
+             className="w-full p-3 mt-2 rounded-xl bg-gray-100 focus:outline-none text-black resize-none text-sm sm:text-base"
             rows={3}
           />
-          <p className="text-sm text-gray-500">{storyDescription.length}/200</p>
+          <p className="text-xs sm:text-sm text-gray-500">{storyDescription.length}/200</p>
           <button
             type="submit"
-            className="bg-blue-500 text-white p-2 rounded-lg mt-2"
+            className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg mt-2 text-sm sm:text-base"
             disabled={loading}
           >
             {loading ? "Posting Story..." : "Post Story"}
@@ -1355,13 +1355,13 @@ const Second = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="bg-white shadow-lg w-full p-5 mt-2 rounded-2xl flex flex-col justify-between">
+        <div className="bg-white shadow-lg w-full p-4 sm:p-5 mt-2 rounded-2xl flex flex-col justify-between">
           <div className="flex flex-col gap-2">
             <div className="flex gap-2 items-center">
               <img
                 src={profileImage || "/Profile.png"}
                 alt="profile"
-                className="w-8 h-8 rounded-full border-3"
+                className="w-8 sm:w-10 h-8 sm:h-10 rounded-full border-2 sm:border-3"
               />
               <input
                 placeholder="Write Something here....."
@@ -1376,21 +1376,21 @@ const Second = () => {
                 <img
                   src={postPreview}
                   alt="preview"
-                  className="h-[200px] w-full object-cover rounded-xl"
+                  className="h-[150px] sm:h-[200px] w-full object-cover rounded-xl"
                 />
               ) : (
                 <video
                   src={postPreview}
                   controls
-                  className="h-[200px] w-full object-cover rounded-xl"
+                  className="h-[150px] sm:h-[200px] w-full object-cover rounded-xl"
                 />
               ))}
           </div>
 
           <div className="Post-section flex gap-3 items-center justify-between mt-2">
-            <div className="p-4 flex gap-5">
+            <div className="p-2 sm:p-4 flex gap-4 sm:gap-5">
               <label htmlFor="image" className="cursor-pointer">
-                <CiImageOn />
+                <CiImageOn className="text-lg sm:text-xl" />
               </label>
               <input
                 id="image"
@@ -1399,7 +1399,7 @@ const Second = () => {
                 onChange={handleImageChange}
                 className="hidden"
               />
-              <FaRegSmile />
+              <FaRegSmile className="text-lg sm:text-xl" />
             </div>
             <button
               type="submit"
@@ -1414,7 +1414,7 @@ const Second = () => {
 
       {message && (
         <p
-          className={`mt-2 ${
+          className={`mt-2 text-sm sm:text-base ${
             message.includes("successfully") ? "text-green-500" : "text-red-500"
           }`}
         >

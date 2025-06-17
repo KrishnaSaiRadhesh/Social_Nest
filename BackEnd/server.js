@@ -6,7 +6,6 @@ const authRouter = require('./Routes/AuthRouter');
 const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
-const fileUpload = require('express-fileupload');
 const passport = require('passport');
 const session = require('express-session');
 const mongoose = require('mongoose');
@@ -53,7 +52,7 @@ passport.use(new GoogleStrategy({
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://funny-pony-68b842.netlify.app'
+  'https://social-nest-ivory.vercel.app'
 ];
 
 const app = express();
@@ -128,11 +127,11 @@ app.get('/auth/logout', (req, res) => {
 });
 
 // Existing Routes
-app.use('/api/auth', authRouter);
-app.use('/api/user', require('./Routes/UserRoute'));
-app.use('/api/posts', require('./Routes/PostRouter'));
-app.use('/api/messages', require('./Routes/MessageRouter'));
-app.use('/api/stories', require('./Routes/StoryRouter')(io));
+app.use("/api/auth", authRouter);
+app.use("/api/user", require("./Routes/UserRoute"));
+app.use("/api/posts", require("./Routes/PostRouter"));
+app.use("/api/messages", require("./Routes/MessageRouter"));
+app.use("/api/stories", require("./Routes/StoryRouter")(io));
 
 // Socket.IO
 let onlineUsers = [];

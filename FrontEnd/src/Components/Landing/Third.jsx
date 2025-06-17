@@ -105,55 +105,58 @@ const Third = () => {
     }
   };
 
-  return (
-    <div className="p-4 h-screen bg-white shadow-lg hidden lg:block ">
-      <div className="p-3 flex items-center gap-3 justify-between w-full mt-1">
-        <h2 className="text-lg font-medium">Suggested for you</h2>
+   return (
+    <div className="bg-white shadow-lg rounded-lg p-3 sm:p-4">
+      {/* Header Section */}
+      <div className="flex items-center justify-between w-full">
+        <h2 className="text-base sm:text-lg font-medium">Suggested for you</h2>
       </div>
 
-      <div className="bg-gray-100 flex justify-between items-center mt-1 gap-1 p-3 rounded-2xl">
-        <div className="flex items-center gap-5">
-          <FiSearch />
+      {/* Search Bar Section */}
+      <div className="bg-gray-100 flex justify-between items-center mt-4 gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <FiSearch className="text-base sm:text-lg" />
           <input
             type="text"
             placeholder="Search"
-            className="outline-none bg-gray-100"
+            className="outline-none bg-gray-100 text-sm sm:text-base w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <IoFilterSharp />
+        <IoFilterSharp className="text-base sm:text-lg" />
       </div>
 
-      <div className="mt-3">
+      {/* User List Section */}
+      <div className="mt-4 sm:mt-5">
         {loading ? (
-          <p>Loading...</p>
+          <p className="text-sm sm:text-base text-center">Loading...</p>
         ) : (
-          <div className="flex flex-col items-left gap-5 mt-5">
+          <div className="flex flex-col items-left gap-4 sm:gap-5">
             {filteredUsers.length === 0 ? (
-              <p>No valid users found</p>
+              <p className="text-sm sm:text-base text-center">No valid users found</p>
             ) : (
               filteredUsers.map((user) => (
                 <div
                   key={user._id}
-                  className="flex items-center justify-between gap-5 px-5"
+                  className="flex items-center justify-between gap-3 sm:gap-4"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={user.image || "/Profile.png"}
                       alt=""
-                      className="w-10 h-10 rounded-full cursor-pointer"
+                      className="w-8 sm:w-10 h-8 sm:h-10 rounded-full cursor-pointer"
                       onClick={() => handleUserClick(user._id)}
                     />
                     <h3
-                      className="font-semibold text-[15px] cursor-pointer"
+                      className="font-semibold text-sm sm:text-base cursor-pointer"
                       onClick={() => handleUserClick(user._id)}
                     >
                       {user.name}
                     </h3>
                   </div>
                   <button
-                    className={`p-2 rounded text-white ${
+                    className={`px-2 sm:px-3 py-1 rounded text-white text-sm sm:text-base ${
                       following[user._id] ? "bg-red-500" : "bg-blue-500"
                     }`}
                     onClick={() =>

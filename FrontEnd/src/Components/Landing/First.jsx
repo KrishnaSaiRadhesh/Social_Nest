@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiHome6Line } from 'react-icons/ri';
-import { FaUserFriends } from 'react-icons/fa';
+import { FaBookmark, FaUserFriends } from 'react-icons/fa';
 import { MdOutlineEventNote } from 'react-icons/md';
 import { IoVideocam } from 'react-icons/io5';
 import { IoChatboxEllipsesOutline } from 'react-icons/io5';
@@ -61,123 +61,100 @@ const First = ({ socket }) => {
     return <div className="p-4 h-screen text-center">Loading...</div>;
   }
 
-  return (
-    <div className="p-4 h-screen">
-      <div className="hidden lg:block md:hidden">
-        <div className="bg-white shadow-lg p-5 rounded-2xl">
-          <div className="Profile p-5 bg-gray-50 rounded-2xl">
-            <div className="pro-sec flex gap-2 items-center">
-              <img
-                src={image || './Profile.png'}
-                alt="Profile_image"
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                <h1 className="text-2xl">{name}</h1>
-                <p>{email}</p>
-              </div>
-            </div>
-            <div className="section2 flex items-center mt-3 gap-5">
-              <div>
-                <h2 className="font-semibold text-[20px]">
-                  {followers?.length}
-                </h2>
-                <p className="text-[18px]">followers</p>
-              </div>
-              <div>
-                <h2 className="font-semibold text-[20px]">
-                  {following?.length}
-                </h2>
-                <p className="text-[18px]">Following</p>
-              </div>
-              <div>
-                <h2 className="font-semibold text-[20px]">{posts?.length}</h2>
-                <p className="text-[18px]">Post</p>
-              </div>
+return (
+    <div className="py-2">
+      {/* Profile Section */}
+      <div className="bg-white shadow-lg p-4 rounded-2xl">
+        <div className="Profile p-3 bg-gray-50 rounded-2xl">
+          <div className="pro-sec flex gap-2 items-center">
+            <img
+              src={image || "./Profile.png"}
+              alt="Profile_image"
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <h1 className="text-lg sm:text-xl">{name}</h1>
+              <p className="text-sm text-gray-500">{email}</p>
             </div>
           </div>
-        </div>
-
-        <div className="Feed-section bg-white shadow-lg p-2 mt-2 rounded-2xl h-[30em]">
-          <div className="Sec-1 p-2">
-            <Link to="/home/feed">
-              <h3 className="flex items-center gap-5 p-3 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-[22px] mt-2">
-                <RiHome6Line /> Feed
-              </h3>
-            </Link>
-            <Link to="/home/friends">
-              <h3 className="flex items-center gap-5 p-3 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-[22px] mt-2">
-                <FaUserFriends /> Friends
-              </h3>
-            </Link>
-            <Link to="/messages">
-              <h3 className="flex items-center gap-5 p-3 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-[22px] mt-2">
-                <IoChatboxEllipsesOutline /> Messages
-              </h3>
-            </Link>
-            <Link to="/home/photos">
-              <h3 className="flex items-center gap-5 p-3 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-[22px] mt-2">
-                <MdOutlineEventNote /> Photos
-              </h3>
-            </Link>
-            <Link to="/home/videos">
-              <h3 className="flex items-center gap-5 p-3 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-[22px] mt-2">
-                <IoVideocam /> Videos
-              </h3>
-            </Link>
-          </div>
-
-          <div className="text-xs text-gray-500 flex space-x-2 mt-10 px-5">
-            <a href="#" className="hover:underline">
-              Privacy
-            </a>
-            <span>·</span>
-            <a href="#" className="hover:underline">
-              Terms
-            </a>
-            <span>·</span>
-            <a href="#" className="hover:underline">
-              Advertising
-            </a>
-            <span>·</span>
-            <a href="#" className="hover:underline">
-              Cookies
-            </a>
-          </div>
-          <div className="text-xs text-gray-500 mt-1 px-5 mb-2">
-            Social © 2023
+          <div className="section2 flex items-center justify-around mt-3">
+            <div className="text-center">
+              <h2 className="font-semibold text-base sm:text-lg">
+                {followers?.length}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-500">followers</p>
+            </div>
+            <div className="text-center">
+              <h2 className="font-semibold text-base sm:text-lg">
+                {following?.length}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-500">Following</p>
+            </div>
+            <div className="text-center">
+              <h2 className="font-semibold text-base sm:text-lg">
+                {posts?.length}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-500">Post</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute lg:hidden bottom-0 bg-white border p-5 w-[96vw] z-10">
-        <ul className="flex gap-4 justify-between">
+      {/* Navigation Links */}
+      <div className="Feed-section bg-white shadow-lg mt-2 rounded-2xl h-auto">
+        <div className="Sec-1 p-5">
           <Link to="/home/feed">
-            <li>
-              <BiMoviePlay />
-            </li>
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <RiHome6Line /> Feed
+            </h3>
           </Link>
           <Link to="/home/friends">
-            <li>
-              <FaUserFriends />
-            </li>
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <FaUserFriends /> Friends
+            </h3>
           </Link>
           <Link to="/messages">
-            <li>
-              <BiMessageSquareDetail />
-            </li>
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <IoChatboxEllipsesOutline /> Messages
+            </h3>
+          </Link>
+          <Link to="/saved" title="Saved Posts">
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <FaBookmark /> Saved Posts
+            </h3>
           </Link>
           <Link to="/home/photos">
-            <li>
-              <IoMdPhotos />
-            </li>
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <MdOutlineEventNote /> Photos
+            </h3>
           </Link>
           <Link to="/home/videos">
-            <li>
-              <BiSolidVideos />
-            </li>
+            <h3 className="flex items-center gap-4 px-3 py-2 rounded-2xl hover:bg-[#1B56FD] hover:text-white text-black text-base sm:text-lg mt-2">
+              <IoVideocam /> Videos
+            </h3>
           </Link>
-        </ul>
+        </div>
+
+        <div className="text-xs text-gray-500 flex flex-wrap gap-2 py-1 px-3 mt-2">
+          <a href="#" className="hover:underline">
+            Privacy
+          </a>
+          <span>·</span>
+          <a href="#" className="hover:underline">
+            Terms
+          </a>
+          <span>·</span>
+          <a href="#" className="hover:underline">
+            Advertising
+          </a>
+          <span>·</span>
+          <a href="#" className="hover:underline">
+            Cookies
+          </a>
+        </div>
+        <div className="text-xs text-gray-500 pl-3 pb-3">
+          Social © 2023
+        </div>
       </div>
     </div>
   );
