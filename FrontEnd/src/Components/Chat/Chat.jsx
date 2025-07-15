@@ -23,12 +23,13 @@ const ChatApp = ({ socket }) => {
     const fetchUserId = async () => {
       try {
         const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/user/Profile",
+          "http://localhost:5173/api/user/user",
           {
             withCredentials: true,
           }
         );
         setUserId(res.data._id);
+       
       } catch (error) {
         console.error("Error fetching user ID:", error);
       }
@@ -37,7 +38,7 @@ const ChatApp = ({ socket }) => {
     const fetchFriends = async () => {
       try {
         const res = await axios.get(
-          "https://social-nest-2.onrender.com/api/auth/friends",
+          "http://localhost:5173/api/auth/friends",
           {
             withCredentials: true,
           }
@@ -52,7 +53,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-2.onrender.com/api/user/${friendId}`,
+            `http://localhost:5173/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -77,7 +78,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `https://social-nest-2.onrender.com/api/messages/${friendId}`,
+            `http://localhost:5173/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -157,7 +158,7 @@ const ChatApp = ({ socket }) => {
       }
 
       const res = await axios.post(
-        "https://social-nest-2.onrender.com/api/messages",
+        "http://localhost:5173/api/messages",
         formData,
         {
           withCredentials: true,
