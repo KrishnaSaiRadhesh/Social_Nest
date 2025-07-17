@@ -57,7 +57,7 @@
 //     {
 //       clientID: process.env.GOOGLE_CLIENT_ID,
 //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:3000/api/auth/google/callback", // Adjust based on your API base path
+//       callbackURL: "https://social-nest-2.onrender.com/api/auth/google/callback", // Adjust based on your API base path
 //     },
 //     async (accessToken, refreshToken, profile, done) => {
 //       try {
@@ -107,7 +107,7 @@
 //       callbackURL:
 //         process.env.NODE_ENV === "production"
 //           ? "https://social-nest-2.onrender.com/api/auth/google/callback"
-//           : "http://localhost:3000/api/auth/google/callback",
+//           : "https://social-nest-2.onrender.com/api/auth/google/callback",
 //     },
 //     async (accessToken, refreshToken, profile, done) => {
 //       try {
@@ -141,6 +141,8 @@
 
 
 
+
+
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserModel = require("../Models/Auth");
@@ -153,33 +155,73 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
-        process.env.NODE_ENV === "production"
-          ? "https://social-nest-2.onrender.com/api/auth/google/callback"
-          : "http://localhost:3000/api/auth/google/callback",
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/api/auth/google/callback"
+          : "https://social-nest-2.onrender.com/api/auth/google/callback",
+      passReqToCallback: true, // Add this to access req object
+      proxy: true // Enable if behind a reverse proxy (like Render)
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
-        console.log("Google OAuth - Full Profile:", JSON.stringify(profile, null, 2)); // Detailed debug
+        console.log("Google OAuth - Profile Email:", profile.emails[0].value);
+        
+        // Better image URL handling
         const googleImage = profile.photos[0]?.value;
-        console.log("Google OAuth - Image URL:", googleImage); // Check image URL
-        let user = await UserModel.findOne({ email: profile.emails[0].value });
+        const sanitizedImageUrl = googleImage 
+          ? googleImage.replace(/=s96-c$/, '=s400-c') // Higher resolution
+          : './Profile.png';
+        
+        console.log("Processed Image URL:", sanitizedImageUrl);
+
+        // Find by googleId first, then by email
+        let user = await UserModel.findOne({ 
+          $or: [
+            { googleId: profile.id },
+            { email: profile.emails[0].value }
+          ]
+        });
+
         if (!user) {
-          user = new UserModel({
+          // New user creation
+          user = await UserModel.create({
             email: profile.emails[0].value,
             name: profile.displayName,
-            image: googleImage || "./Profile.png",
+            image: sanitizedImageUrl,
             googleId: profile.id,
-            googleImage: googleImage, // Explicitly set googleImage
+            googleImage: sanitizedImageUrl,
+            verified: true
           });
-          await user.save();
-          console.log("New user created with googleImage:", googleImage);
+          console.log("New Google user created:", user._id);
         } else {
-          user.name = profile.displayName || user.name;
-          user.image = googleImage || user.image;
-          user.googleImage = googleImage || user.googleImage; // Update googleImage
-          await user.save();
-          console.log("Existing user updated with googleImage:", googleImage);
+          // Existing user update
+          const updates = {
+            name: profile.displayName || user.name,
+            googleId: profile.id // Ensure googleId is set
+          };
+
+          // Only update image if we have a new Google image
+          if (googleImage) {
+            updates.image = sanitizedImageUrl;
+            updates.googleImage = sanitizedImageUrl;
+          }
+
+          // Check if user previously used local auth
+          if (!user.googleId && profile.id) {
+            updates.googleId = profile.id;
+            if (googleImage) {
+              updates.image = sanitizedImageUrl;
+              updates.googleImage = sanitizedImageUrl;
+            }
+          }
+
+          user = await UserModel.findByIdAndUpdate(
+            user._id,
+            { $set: updates },
+            { new: true }
+          );
+          console.log("Existing user updated:", user._id);
         }
+
         return done(null, user);
       } catch (error) {
         console.error("Google Strategy Error:", error);
@@ -188,5 +230,8 @@ passport.use(
     }
   )
 );
+
+// Serialization/Deserialization should be in your main server file
+// but ensure it's properly set up there
 
 module.exports = passport;

@@ -10,17 +10,17 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     let token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token); // Debug log
+    //console.log("Token from localStorage:", token); // Debug log
     if (!token) {
       const cookie = document.cookie.split("; ").find((row) => row.startsWith("token="));
       token = cookie?.split("=")[1];
-      console.log("Token from cookie:", token); // Debug log
+      //console.log("Token from cookie:", token); // Debug log
     }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("Authorization header set:", config.headers.Authorization); // Debug log
+      //console.log("Authorization header set:", config.headers.Authorization); // Debug log
     } else {
-      console.log("No token available"); // Debug log
+      //console.log("No token available"); // Debug log
     }
     return config;
   },

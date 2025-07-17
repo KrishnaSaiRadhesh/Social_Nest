@@ -99,6 +99,8 @@ const UserModel = require("../Models/Auth");
 const jwt = require("jsonwebtoken");
 
 exports.protectRoute = async (req, res, next) => {
+  console.log("Middleware triggered for path:", req.path); // New log
+  console.log("Request headers:", req.headers); // Your log
   try {
     let token;
 

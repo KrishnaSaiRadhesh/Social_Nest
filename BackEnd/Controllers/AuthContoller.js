@@ -436,31 +436,26 @@ exports.GETPROFILE = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.savedPosts = user.savedPosts.filter(
-      (post) =>
-        post &&
-        post._id &&
-        post.createdAt &&
-        post.user &&
-        post.user._id &&
-        post.user.name
-    );
+    // Filter and map savedPosts for the response without saving
+    const filteredSavedPosts = user.savedPosts
+      .filter(
+        (post) =>
+          post &&
+          post._id &&
+          post.createdAt &&
+          post.user &&
+          post.user._id &&
+          post.user.name
+      )
+      .map((post) => post._id);
 
-    user.savedPosts = user.savedPosts.map((post) => post._id);
-    await user.save();
+    // Create a new object or modify user object for response
+    const responseUser = {
+      ...user.toObject(),
+      savedPosts: filteredSavedPosts, // Use the filtered/mapped IDs
+    };
 
-    user = await userModel
-      .findById(userId)
-      .select("-password")
-      .populate("following", "name image")
-      .populate("followers", "name image")
-      .populate({
-        path: "savedPosts",
-        select: "description image mediaType user createdAt",
-        populate: { path: "user", select: "name image" },
-      });
-
-    res.status(200).json(user);
+    res.status(200).json(responseUser);
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ message: "Error fetching profile." });

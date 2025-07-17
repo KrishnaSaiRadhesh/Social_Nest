@@ -534,7 +534,7 @@ const First = ({ socket }) => {
         console.log("Profile data:", data);
         setName(data.name || "Unknown");
         setEmail(data.email || "");
-        setImage(data.image || data.googleImage || "./Profile.png");
+        setImage(data.googleImage || data.image || "./Profile.png");
         setFollowers(data.followers || []);
         setFollowing(data.following || []);
         setPosts(data.posts || []);

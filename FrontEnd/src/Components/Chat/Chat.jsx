@@ -23,7 +23,7 @@ const ChatApp = ({ socket }) => {
     const fetchUserId = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5173/api/user/user",
+          "http://localhost:3000/api/user/user",
           {
             withCredentials: true,
           }
@@ -38,7 +38,7 @@ const ChatApp = ({ socket }) => {
     const fetchFriends = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5173/api/auth/friends",
+          "http://localhost:3000/api/auth/friends",
           {
             withCredentials: true,
           }
@@ -53,7 +53,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:5173/api/user/${friendId}`,
+            `http://localhost:3000/api/user/${friendId}`,
             {
               withCredentials: true,
             }
@@ -78,7 +78,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:5173/api/messages/${friendId}`,
+            `http://localhost:3000/api/messages/${friendId}`,
             {
               withCredentials: true,
             }
@@ -158,7 +158,7 @@ const ChatApp = ({ socket }) => {
       }
 
       const res = await axios.post(
-        "http://localhost:5173/api/messages",
+        "http://localhost:3000/api/messages",
         formData,
         {
           withCredentials: true,
