@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api"; // Import api instance
+import api from "../../api"; 
 import { BsArrowLeft } from "react-icons/bs";
 
 const Videos = () => {
-  const [videos, setVideos] = useState([]); // Store user's videos
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [videos, setVideos] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserVideos = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/user/user"); // Use api
+        const res = await api.get("/user/user");
         const userData = res.data;
         // Filter posts to include only videos
         const userVideos =

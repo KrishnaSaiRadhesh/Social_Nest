@@ -1,37 +1,3 @@
-// const userModel = require("../Models/Auth")
-// const cloudinary = require("../Config/cloudinary")
-
-// exports.UPDATEPROFILE = async (req, res) => {
-//     const {name, email, image} = req.body;
-
-//     try {
-//         const user_id = req.user_id  // Here we are getting id from middleware which stored in cookies
-//         const user = await userModel.findById(user_id) // Here we are checking whether the id is present in database.
-//         if (!user) {
-//             return res.status(404).json({message: "User not found"})
-//         }
-//         if(image){
-//             if(user.image){
-//                 await cloudinary.uploader.destory(user.image.split("/").pop.split(".")[0])
-//             }
-//             const uploadProfile_image = await cloudinary.uploader.upload(image);
-//             image = uploadProfile_image.secureurl  
-//         }
-
-//        user.name = name || user.name
-//        user.email = email || user.email
-//        user.image = image || user.image
-//        await user.save()
-
-//        const updatedUser = await userModel.findByIdAndUpdate(req.user_id, {new:true})
-//        res.status(200).json({message: "Profile updated successfully", updatedUser})
-
-//     } catch (error) {
-//         console.log(error)
-//         res.status(500).json({message: "Something went wrong"})
-//     }
-// }
-
 const userModel = require('../Models/Auth');
 const cloudinary = require('../Config/cloudinary');
 

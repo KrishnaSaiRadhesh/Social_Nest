@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api"; // Import api instance
+import api from "../../api";
 import { BsArrowLeft } from "react-icons/bs";
 
 const Photos = () => {

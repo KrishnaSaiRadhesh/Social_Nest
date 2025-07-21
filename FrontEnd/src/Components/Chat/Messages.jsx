@@ -23,7 +23,7 @@ const ChatApp = ({ socket }) => {
     const fetchUserId = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/user/user", // Correct backend URL
+          "https://social-nest-2.onrender.com/api/user/user", // Correct backend URL
           {
             withCredentials: true,
           }
@@ -38,7 +38,7 @@ const ChatApp = ({ socket }) => {
     const fetchFriends = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/auth/friends",
+          "https://social-nest-2.onrender.com/api/auth/friends",
           {
             withCredentials: true,
           }
@@ -53,7 +53,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/user/${friendId}`, // Correct backend URL
+            `https://social-nest-2.onrender.com/api/user/${friendId}`, // Correct backend URL
             {
               withCredentials: true,
             }
@@ -79,7 +79,7 @@ const ChatApp = ({ socket }) => {
       if (friendId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/messages/${friendId}`, // Correct backend URL
+            `https://social-nest-2.onrender.com/api/messages/${friendId}`, // Correct backend URL
             {
               withCredentials: true,
             }
@@ -155,7 +155,7 @@ const ChatApp = ({ socket }) => {
       if (imageFile) formData.append("image", imageFile);
 
       const res = await axios.post(
-        "http://localhost:3000/api/messages", // Correct backend URL
+        "https://social-nest-2.onrender.com/api/messages", // Correct backend URL
         formData,
         {
           withCredentials: true,

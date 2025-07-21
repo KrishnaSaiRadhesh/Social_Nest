@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineEmail } from "react-icons/md";
@@ -29,7 +26,7 @@ const Login = () => {
 
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/auth/login",
+      "https://social-nest-2.onrender.com/api/auth/login",
       formData,
       {
         headers: {
@@ -61,7 +58,7 @@ const Login = () => {
 };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
+    window.location.href = "https://social-nest-2.onrender.com/api/auth/google";
   };
 
   return (

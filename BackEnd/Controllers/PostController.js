@@ -36,11 +36,6 @@ exports.CREATEPOST = async (req, res) => {
         resource_type: mediaType === 'video' ? 'video' : 'image',
         timeout: 120000, // 120 seconds for videos
       });
-      // console.log('Cloudinary response:', {
-      //   secure_url: mediaUpload.secure_url,
-      //   resource_type: mediaUpload.resource_type,
-      //   format: mediaUpload.format,
-      // });
     } catch (uploadError) {
       console.error("Cloudinary upload failed:", uploadError.message, uploadError);
       return res.status(500).json({

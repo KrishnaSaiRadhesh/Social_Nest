@@ -27,7 +27,7 @@ const Posts = ({ posts, setPosts }) => {
       try {
         setLoading(true);
         const res = await axios.get(
-          "http://localhost:3000/api/auth/user",
+          "https://social-nest-2.onrender.com/api/auth/user",
           {
             withCredentials: true,
           }
@@ -37,7 +37,7 @@ const Posts = ({ posts, setPosts }) => {
 
         // Fetch profile data for saved posts
         const profileRes = await axios.get(
-          "http://localhost:3000/api/auth/user",
+          "https://social-nest-2.onrender.com/api/auth/user",
           {
             withCredentials: true,
           }
@@ -81,7 +81,7 @@ const Posts = ({ posts, setPosts }) => {
   const commentSubmit = async (postId) => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${postId}/comment`,
+        `https://social-nest-2.onrender.com/api/posts/${postId}/comment`,
         { commentText: commentText[postId] || "" },
         { withCredentials: true }
       );
@@ -106,7 +106,7 @@ const Posts = ({ posts, setPosts }) => {
   const handleLike = async (id) => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${id}/like`,
+        `https://social-nest-2.onrender.com/api/posts/${id}/like`,
         {},
         { withCredentials: true }
       );
@@ -141,7 +141,7 @@ const Posts = ({ posts, setPosts }) => {
       const isSaved = savedPosts[postId];
       const endpoint = isSaved ? "unsave" : "save";
       const res = await axios.post(
-        `http://localhost:3000/api/posts/${postId}/${endpoint}`,
+        `https://social-nest-2.onrender.com/api/posts/${postId}/${endpoint}`,
         {},
         { withCredentials: true }
       );
@@ -163,7 +163,7 @@ const Posts = ({ posts, setPosts }) => {
   };
 
   const handleShare = async (post) => {
-    const shareUrl = `http://localhost:3000/posts/${post._id}`;
+    const shareUrl = `https://social-nest-2.onrender.com/posts/${post._id}`;
     const shareData = {
       title: `Post by ${post.user?.name || "User"}`,
       text: post.description || "Check out this post!",
@@ -252,7 +252,7 @@ const Posts = ({ posts, setPosts }) => {
     }
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/posts/${postId}`,
+        `https://social-nest-2.onrender.com/api/posts/${postId}`,
         { description: editDesc, image: editMedia, mediaType: editMediaType },
         { withCredentials: true }
       );
@@ -279,7 +279,7 @@ const Posts = ({ posts, setPosts }) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
       await axios.delete(
-        `http://localhost:3000/api/posts/${postId}`,
+        `https://social-nest-2.onrender.com/api/posts/${postId}`,
         {
           withCredentials: true,
         }
