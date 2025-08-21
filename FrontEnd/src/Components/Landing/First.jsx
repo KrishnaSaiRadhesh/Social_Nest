@@ -104,10 +104,10 @@ const First = ({ socket }) => {
                 onError={(e) => { e.target.src = "./Profile.png"; }}
               />
               <div>
-                <h1 className="text-2xl truncate max-w-[150px] sm:max-w-none" title={name}>
+                <h1 className="text-2xl truncate  w-[150px] sm:max-w-none" title={name}>
                   {name}
                 </h1>
-                <p className="truncate max-w-[150px] sm:max-w-none">{email}</p>
+                <p className="truncate w-[150px] sm:max-w-none">{email}</p>
               </div>
             </div>
           </div>
